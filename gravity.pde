@@ -42,8 +42,7 @@ void setup()
     dataGui = new DataGUI(data);
     
     generator = new ParticlesGenerator(data.particles);
-    
-      
+
     setupControls();
     
     data.LoadSettings("./Settings/default.json");
