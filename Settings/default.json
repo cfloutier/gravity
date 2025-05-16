@@ -1,21 +1,21 @@
 {
   "Style": {
-    "backgroundColor": -1,
-    "lineColor": -16777216,
-    "lineWidth": 0.45000001788139343
+    "backgroundColor": -16118253,
+    "lineColor": -1319184,
+    "lineWidth": 0.23333333432674408
   },
   "Particles": {
-    "nb_particles": 104,
+    "nb_particles": 444,
     "max_radius": 410,
     "cleanup": true,
-    "cleanup_min_radius": 50,
-    "gravity": 13.333333969116211,
-    "steps_size": 52.381004333496094,
+    "cleanup_min_radius": 26.666667938232422,
+    "gravity": 213.33334350585938,
+    "steps_size": 6.760000228881836,
     "min_radius": 180,
-    "max_speed": 0.013333320617675781,
+    "max_speed": 0.17333340644836426,
     "draw": true,
     "min_speed": 0.17333340644836426,
     "steps": 694,
-    "cleanup_max_radius": 723.3333740234375
+    "cleanup_max_radius": 553.3333129882812
   }
 }

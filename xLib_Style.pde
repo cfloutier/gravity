@@ -1,6 +1,3 @@
-
-
-
 class Style extends GenericDataClass
 {
   Style(){ super("Style"); }
@@ -33,7 +30,6 @@ class Style extends GenericDataClass
   }
 }
 
-
 class StyleGUI extends GUIPanel
 {
   Style style;
@@ -49,7 +45,7 @@ class StyleGUI extends GUIPanel
 
   void setupControls()
   {
-    style = global_data.style;
+    style = data.style;
     super.Init("Style", style);
     lineWidth = addSlider("lineWidth", "Line Width", 0, 5, false);
     lineColor = addColorGroup("Line Color", style.lineColor);
@@ -58,7 +54,7 @@ class StyleGUI extends GUIPanel
 
   void update_ui()
   {
-    var _color = style.backgroundColor.col;
+    int _color = style.backgroundColor.col;
    LabelsHandler.set_labels_colors( color(255-red(_color),255-green(_color),255-blue(_color))   );
   }
 }

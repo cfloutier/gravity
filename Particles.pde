@@ -82,7 +82,7 @@ class ParticlesGUI extends GUIPanel
     cleanup = addToggle("cleanup", "Cleanup", false);
     
     cleanup_min_radius = addSlider("cleanup_min_radius", "Min", 0, 1000, true);
-    cleanup_min_radius = addSlider("cleanup_min_radius", "Max", 0, 1000, false);
+    cleanup_max_radius = addSlider("cleanup_max_radius", "Max", 0, 1000, false);
     
 
   }
@@ -192,13 +192,9 @@ class Particle {
         speed.x += force.x * data.steps_size;
         speed.y += force.y * data.steps_size;
         position = new PVector(position.x + speed.x * data.steps_size, position.y + speed.y * data.steps_size);
-        
-        
-        
-        line.add(position);
-        
-    }
 
+        line.add(position);      
+    }
 
     void draw()
     {
@@ -209,7 +205,6 @@ class Particle {
     {
       println( position.x + " - " + position.y + " | " + speed.x + " - " + speed.y );
     }
-
 }
 
 class ParticlesGenerator {
@@ -246,7 +241,7 @@ class ParticlesGenerator {
     {
         for (Particle p: particles)
         {
-            p.move(data.steps_size, data.gravity);
+            p.move( data );
             //p.print();
         }
     }

@@ -2,7 +2,7 @@ import controlP5.*;
 
 class DataGUI
 {
-   public DataGUI(DataGlobal data)
+   public DataGUI(GravityData data)
   {
     this.data = data;
     particles_ui = new ParticlesGUI(data.particles); 

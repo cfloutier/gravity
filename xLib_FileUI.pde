@@ -1,7 +1,7 @@
 
 void addFileTab()
 {
-  cp5.addTab("Settings");
+  cp5.addTab("Files");
   
   println("addFileTab");
 
@@ -14,14 +14,14 @@ void addFileTab()
   cp5.addButton("LoadJson")
     .setPosition(xPos, yPos)
     .setSize(widthButton, heightButton)
-    .moveTo("Settings");        
+    .moveTo("Files");        
 
   xPos += widthButton;
 
   cp5.addButton("SaveJson")
     .setPosition(xPos, yPos)
     .setSize(widthButton, heightButton)
-    .moveTo("Settings");    
+    .moveTo("Files");    
 
   yPos += heightButton;
   xPos = 0;
@@ -29,35 +29,29 @@ void addFileTab()
   cp5.addButton("ExportPDF")
     .setPosition(xPos, yPos)
     .setSize(widthButton, heightButton)
-    .moveTo("Settings");      
+    .moveTo("Files");      
 
   xPos += widthButton;
 
   cp5.addButton("ExportSVG")
     .setPosition(xPos, yPos)
     .setSize(widthButton, heightButton)
-    .moveTo("Settings");    
+    .moveTo("Files");    
 
   xPos += widthButton;
 }
 
 void LoadJson()
 {
-  println("LoadJson");
+  println("LoadJson ");
   selectInput("Select data file ", "loadSelected", dataFile("../Settings/default.json")  );
 }
 
 void loadSelected(File selection) 
 {
-  if (selection == null) 
+  if (selection != null) 
   {
-
-  } else 
-  {
-    global_data.LoadSettings(selection.getAbsolutePath());
-    global_data.name = selection.getName();
-    global_data.name = global_data.name.substring(0, global_data.name.length() - 5);
-   
+    data.LoadSettings(selection.getAbsolutePath());
     dataGui.setGUIValues();
   }
 }
@@ -77,10 +71,10 @@ void saveSelected(File selection)
     if (path.length() < 5 || !path.substring(path.length() - 5).equals(".json"))
       path = path + ".json";
 
-    global_data.SaveSettings(path);
+    data.SaveSettings(path);
     
-    var name = selection.getName();
-    global_data.name = name.substring(0, name.length() - 5);
+    String name = selection.getName();
+    data.name = name.substring(0, name.length() - 5);
   }
 }
 
@@ -110,17 +104,17 @@ void start_draw()
 {
   dataGui.update_ui();
 
-  if (global_data.changed)
+  if (data.changed)
   {
-    if (global_data.auto_save)
-      global_data.save();
+    if (data.auto_save)
+      data.save();
 
-    global_data.changed = false;
+    data.changed = false;
   }
 
   if (record) 
   {
-    String name = global_data.name;
+    String name = data.name;
     if (name == "")
       name = "default";
       
@@ -142,10 +136,10 @@ void start_draw()
     else if (mode ==2)
       current_graphics = createGraphics((int)newWidth, (int)newheight, SVG, fileName+ ".svg");       
     
-    global_data.setSize(newWidth, newheight); 
+    data.setSize(newWidth, newheight); 
     
     current_graphics.beginDraw();
-    current_graphics.strokeWeight(global_data.style.lineWidth*sizeMultiplier);
+    current_graphics.strokeWeight(data.style.lineWidth*sizeMultiplier);
     
     current_graphics.rotate(-PI/2);
     current_graphics.translate(-newWidth,newheight/2);
@@ -154,14 +148,14 @@ void start_draw()
     
     current_graphics = g;
 
-    background(global_data.style.backgroundColor.col);
-    strokeWeight(global_data.style.lineWidth);
+    background(data.style.backgroundColor.col);
+    strokeWeight(data.style.lineWidth);
 
-    stroke(global_data.style.lineColor.col);
+    stroke(data.style.lineColor.col);
     
     current_graphics = g;
 
-    global_data.setSize(width, height);
+    data.setSize(width, height);
   } 
 }
 

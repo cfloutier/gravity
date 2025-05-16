@@ -24,7 +24,7 @@ import processing.pdf.*;
 import processing.dxf.*;
 import processing.svg.*;
 
-DataGlobal global_data;
+GravityData data;
 DataGUI dataGui;
 
 ParticlesGenerator generator;
@@ -38,16 +38,16 @@ void setup()
 { 
     size(1200, 800); 
     
-    global_data = new DataGlobal();
-    dataGui = new DataGUI(global_data);
+    data = new GravityData();
+    dataGui = new DataGUI(data);
     
-    generator = new ParticlesGenerator(global_data.particles);
+    generator = new ParticlesGenerator(data.particles);
     
       
     setupControls();
     
-    global_data.LoadSettings("./Settings/default.json");
-    global_data.name = "default";
+    data.LoadSettings("./Settings/default.json");
+    data.name = "default";
     
     dataGui.setGUIValues();
     
@@ -67,17 +67,17 @@ void draw()
 {
     start_draw();  
   
-    background(global_data.style.backgroundColor.col);
+    background(data.style.backgroundColor.col);
     
-    if (global_data.particles.changed)
+    if (data.particles.changed)
       generator.buildLines();   
     
     // recenter
     pushMatrix();
     translate(width/2, height/2);
     
-    strokeWeight(global_data.style.lineWidth);   
-    stroke(global_data.style.lineColor.col);
+    strokeWeight(data.style.lineWidth);   
+    stroke(data.style.lineColor.col);
       
     smooth();
     generator.draw();
@@ -85,5 +85,5 @@ void draw()
     popMatrix();
     end_draw();
 
-    global_data.particles.changed = false;
+    data.particles.changed = false;
 }
