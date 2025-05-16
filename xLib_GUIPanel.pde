@@ -1,0 +1,293 @@
+
+int indexControler = 0;
+
+static final int StartX = 20;
+static final int StartY = 20;
+
+
+static class LabelsHandler
+{
+  static public ArrayList<Textlabel> labels = new ArrayList<Textlabel>(); 
+  static int label_color;
+
+  static void set_labels_colors(int _color)
+  {
+    label_color = _color;
+    for (Textlabel label: labels)
+    {
+      label.setColorValue(label_color);
+    }
+  }
+}
+
+
+class GUIPanel implements ControlListener
+{
+  String pageName;
+  
+  float xPos = 0;
+  float yPos = 0;
+
+  int xspace = 15;
+
+  int widthCtrl = 300;
+  int heightCtrl = 20;
+  
+  
+  GenericDataClass associated_data;
+  
+  Tab tab;
+
+  void Init(String pageName, GenericDataClass data)
+  {
+    this.pageName = pageName; //<>//
+    this.associated_data = data;
+    
+    tab = cp5.addTab(pageName);
+    //print (" tab " + tab);
+    println("add tab " + pageName);  
+
+    cp5.addListener(this);
+
+    yPos = StartY;
+    xPos = StartX;
+  }
+
+  public void onUIChanged()
+  {   
+    associated_data.changed = true;
+    global_data.changed = true;
+  }
+
+  public void controlEvent(ControlEvent theEvent) {  
+    
+    var tab_name = "";
+    if (theEvent.isController())
+    {
+      var controller = theEvent.getController();
+      tab_name = controller.getTab().getName();
+    }
+    else if (theEvent.isGroup())
+    {
+      // used for radio only
+  
+       var group = theEvent.getGroup();  
+       tab_name = group.getTab().getName();
+       
+       if (!tab_name.equals(pageName))
+         return;
+
+       String class_name = group.getClass().getSimpleName();
+
+       var is_radio = class_name.equals("RadioButton");
+
+       if (is_radio) 
+       {
+          // small fix to setup int_value from radio
+          var int_value = int(group.getValue());
+          var name = group.getName();
+          associated_data.setInt(name, int_value);
+       }  
+    }
+    
+    if (tab_name == pageName)
+        onUIChanged();
+  }
+
+
+
+  Textlabel inlineLabel(String content, int width)
+  {
+    Textlabel l = cp5.addTextlabel("Label" + this.pageName + indexControler)
+      .setText(content)
+      .setPosition(xPos, yPos)
+      .setSize(width, heightCtrl)
+      .setColorValue(LabelsHandler.label_color)
+      .moveTo(pageName);
+      
+    LabelsHandler.labels.add(l);
+  
+    xPos += width;
+    indexControler++;
+
+    return l;
+  }
+
+
+
+  
+  Textlabel addLabel(String content)
+  {
+    yPos += 10;
+
+    Textlabel l = cp5.addTextlabel("Label" + this.pageName + indexControler)
+      .setText(content)
+      .setPosition(xPos, yPos)
+      .setSize(100, heightCtrl)
+      .setColorValue(LabelsHandler.label_color)
+      .moveTo(pageName);
+
+    LabelsHandler.labels.add(l);
+
+    yPos += 15;
+    indexControler++;
+
+    return l;
+  }
+
+  Slider addIntSlider(String field, String label, int min, int max, boolean horizontal)
+  {
+    Slider s = addSlider( field, label, min, max, horizontal);
+    int nbTicks = (int) (max - min + 1);
+    s.setNumberOfTickMarks(nbTicks);
+    s.showTickMarks(false);
+    s.snapToTickMarks(true);
+
+    return s;
+  }
+
+  Slider addSlider(String field, String label, float min, float max, boolean horizontal)
+  {
+    Slider s = cp5.addSlider(associated_data, field)
+      .setLabel(label)
+      .setPosition(xPos, yPos)
+      .setSize(widthCtrl, heightCtrl)
+      .setRange(min, max)
+      .moveTo(pageName);
+
+    if (horizontal)
+    {
+      xPos += xspace + widthCtrl;
+    } else
+    {
+      yPos+=heightCtrl+2;
+      xPos = StartX;
+    }
+
+    controlP5.Label l = s.getCaptionLabel();
+    l.getStyle().marginTop = 0; //move upwards (relative to button size)
+    l.getStyle().marginLeft = -65; //move to the right
+
+    return s;
+  }
+  
+  Toggle addToggle(String name, String label,  boolean inline)
+  {
+    Toggle t = cp5.addToggle(associated_data, name)
+      .setLabel(label)
+      .setPosition(xPos, yPos)
+      .setSize(100, heightCtrl)
+      .setMode(ControlP5.SWITCH)
+      .moveTo(pageName);
+
+    CColor controlerColor = t.getColor();
+    int tmp = controlerColor.getActive();
+    controlerColor.setActive( controlerColor.getBackground());
+    controlerColor.setBackground(tmp);
+
+    if (inline)
+    {
+        xPos+=100+5;
+    }
+    else
+    {
+      nextLine();
+    }
+
+    //t.setLabel("The Toggle Name");
+    controlP5.Label l = t.getCaptionLabel();
+    l.getStyle().marginTop = -heightCtrl + 2; //move upwards (relative to button size)
+    l.getStyle().marginLeft = 10; //move to the right
+
+    return t;
+  }
+
+  ColorPicker addColorPicker(String name, String label)
+  {
+    addLabel(label);
+
+    ColorPicker cp = cp5.addColorPicker(associated_data, name)
+
+      .setPosition(xPos, yPos)
+      .setSize(100, heightCtrl*3)
+      .moveTo(pageName);
+
+    yPos+=heightCtrl*3;
+
+    return cp;
+  }
+
+  ColorGroup addColorGroup(String name, ColorRef colorRef)
+  {
+    ColorGroup grp = new ColorGroup(colorRef, name );
+
+    grp.Init(this);
+
+    return grp;
+  }
+
+  Button addButton(String name)
+  { 
+    int width_bt = 100;
+    
+    Button bt = cp5.addButton(name + indexControler)
+      .setPosition(xPos, yPos)
+      .setLabel(name)
+      .setSize(width_bt, heightCtrl)
+      .moveTo(pageName);
+      
+    xPos += width_bt+5;
+
+    indexControler++;
+    return bt;
+  }
+
+  RadioButton addRadio(String name, ArrayList<String> labels )
+  {
+    int width_bt = 100;
+    
+    var r1 = cp5.addRadioButton(associated_data, name)
+         .setPosition(xPos, yPos)
+         .setSize(width_bt, heightCtrl)
+         .setItemsPerRow(labels.size())
+         .setSpacingColumn(10)
+         .moveTo(pageName);
+         
+  
+    for (int i = 0 ; i < labels.size(); i++)
+    {
+      var _label = labels.get(i);
+      r1.addItem(_label, float(i));
+    }
+     
+    for(Toggle t:r1.getItems()) {
+       t.getCaptionLabel().setColorBackground(color(125,0));
+       
+       t.getCaptionLabel().getStyle().moveMargin(-8,0,0,-width_bt);   
+       t.getCaptionLabel().getStyle().movePadding(7,0,0,3);
+       t.getCaptionLabel().getStyle().backgroundWidth = 500;
+       t.getCaptionLabel().getStyle().backgroundHeight = 20;
+     }
+    
+    nextLine();   
+    return r1;
+  }
+
+  void start()
+  {
+    xPos = 20;
+    yPos = 20;
+  }
+  
+  void nextLine()
+  {
+    xPos = 20;
+    yPos += heightCtrl + 1;
+  }
+  
+  void space()
+  {
+    yPos += 5;
+  }
+  
+}
