@@ -104,7 +104,34 @@ class GenericDataClass
 
     return json;
   }
+  
+    void CopyFrom(GenericDataClass src)
+  {
+    Field[] fields = this.getClass().getDeclaredFields();
+    for (Field field : fields) {
+      try {
+        field.setAccessible(true); // Allow access to private fields if necessary
+        String name = field.getName();
+        if (name == "changed" || name =="this$0")
+        {
+          continue;
+        }
+        
+        field.set(this, field.get(src));
+        
+   
+      }
+      catch (IllegalAccessException e) {
+        e.printStackTrace(); // Handle exceptions gracefully
+      }
+    }
+    
+  }
+  
 }
+
+
+
 
 class DataGlobal
 {

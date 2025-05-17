@@ -137,7 +137,12 @@ class GUIPanel implements ControlListener
 
   Slider addIntSlider(String field, String label, int min, int max, boolean horizontal)
   {
-    Slider s = addSlider( field, label, min, max, horizontal);
+    return addIntSlider(field, label, associated_data, min, max, horizontal);
+  }
+
+  Slider addIntSlider(String field, String label, Object the_data, int min, int max, boolean horizontal)
+  {
+    Slider s = addSlider( field, label, the_data, min, max, horizontal);
     int nbTicks = (int) (max - min + 1);
     s.setNumberOfTickMarks(nbTicks);
     s.showTickMarks(false);
@@ -148,7 +153,12 @@ class GUIPanel implements ControlListener
 
   Slider addSlider(String field, String label, float min, float max, boolean horizontal)
   {
-    Slider s = cp5.addSlider(associated_data, field)
+    return addSlider(field, label, associated_data, min, max, horizontal);
+  }
+
+  Slider addSlider(String field, String label, Object the_data, float min, float max, boolean horizontal)
+  {
+    Slider s = cp5.addSlider(the_data, field)
       .setLabel(label)
       .setPosition(xPos, yPos)
       .setSize(widthCtrl, heightCtrl)
