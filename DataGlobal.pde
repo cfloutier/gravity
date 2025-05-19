@@ -26,6 +26,13 @@ class GravityData extends DataGlobal
 
 class DataGUI extends MainPanel
 {
+  
+  DataGlobal data;
+  
+  ParticlesGUI particles_ui;
+  PlanetsGui planets_gui;
+  StyleGUI style_gui;
+
    public DataGUI(GravityData data)
   {
     this.data = data;
@@ -41,36 +48,7 @@ class DataGUI extends MainPanel
     addTab(planets_gui);
     addTab(style_gui);
     super.Init();
-  }
 
-  DataGlobal data;
-  ParticlesGUI particles_ui;
-  PlanetsGui planets_gui;
-  StyleGUI style_gui;
-  
-  // update UI for all non controller (labels or hide/show)
-  void update_ui()
-  {
-    if (!data.changed && !data.need_update_ui )
-      return;
-
-    particles_ui.update_ui();  
-    planets_gui.update_ui();  
-    style_gui.update_ui();  
-  }
-  
-  void setupControls()
-  { 
-    style_gui.setupControls();  
-    particles_ui.setupControls(  ) ;
-    planets_gui.setupControls(); 
     cp5.getTab("Planets").bringToFront();
-  }
-  
-  void setGUIValues()
-  {
-    particles_ui.setGUIValues();
-    style_gui.setGUIValues();
-    planets_gui.setGUIValues();
   }
 }

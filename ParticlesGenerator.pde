@@ -135,7 +135,7 @@ class ParticlesGenerator {
   }
 
   void buildLines() {
-
+    //println("build lines");
     particles.clear();
     
     randomSeed(0);

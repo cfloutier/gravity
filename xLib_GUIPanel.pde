@@ -20,7 +20,7 @@ static class LabelsHandler
   }
 }
 
-class MainPanel implements ControlListener
+class MainPanel
 {
   ArrayList<GUIPanel> panels = new ArrayList<GUIPanel>();
   String activeTab = "";
@@ -36,17 +36,51 @@ class MainPanel implements ControlListener
   
   void Init()
   {
-    cp5.getTabs().addListener(this);
-  }
+    // must be called after addTabs
 
-  public void controlEvent(ControlEvent theControlEvent) {  
-
-    println("controlEvent " + theControlEvent);
-    if (theControlEvent.isTab()) {
-      activeTab = theControlEvent.getTab().getName(); //<>//
-      println("active tab is " + activeTab);
+    for (GUIPanel panel : panels)
+    {
+      panel.Init();
+      panel.setupControls();
     }
   }
+
+  void setGUIValues()
+  {
+    for (GUIPanel panel : panels)
+    {
+      panel.setGUIValues();
+    }
+  }
+
+  void update_ui()
+  {
+    // update all changes in data to controller thats are not user imputs
+    // like labels
+    // or show hide controls depending on a status
+
+    if (!data.any_change() && !data.need_update_ui )
+      return;
+
+    for (GUIPanel panel : panels)
+    {
+      panel.update_ui();
+    }
+  }
+
+  void draw()
+  {
+    // checks if it's not an export 
+    if (record)
+      return;
+
+    for (GUIPanel panel : panels)
+    {
+      panel.draw();
+    }
+  }
+
+
 
 }
 
@@ -85,6 +119,36 @@ class GUIPanel implements ControlListener
 
     yPos = StartY;
     xPos = StartX;
+  }
+
+  void setupControls()
+  {
+    // create controls here
+
+    println("Error : setupControls() must be implemented in extended classes ");
+  }
+
+  void setGUIValues()
+  {
+    // overload it to refines all values to controls
+
+    println("Error : setGUIValues() must be implemented in extended classes ");
+  }
+
+  // update UI for all non controller (labels or hide/show)
+  void update_ui()
+  {
+    // update all changes in data to controller thats are not user imputs
+    // like labels
+    // or show hide controls depending on a status
+
+    println("Error : update_ui() must be implemented in extended classes ");
+  }
+
+  void draw()
+  {
+    // can be optionnally setup to draw figure in the drawing
+
   }
 
   public void onUIChanged()

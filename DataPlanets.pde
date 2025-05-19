@@ -133,6 +133,9 @@ class PlanetsGui extends GUIListPanel
       
       DataPlanet planet = (DataPlanet) data.items.get(data.current_index);
       data.edit_planet.CopyFrom(planet);
+      
+      println("edit_planet changed");
+      println("edit_planet.size " + data.edit_planet.size); 
 
       center_x.setValue(planet.center_x);
       center_y.setValue(planet.center_y);
@@ -145,6 +148,10 @@ class PlanetsGui extends GUIListPanel
     {
       DataPlanet planet = (DataPlanet) data.items.get(data.current_index);
       planet.CopyFrom(data.edit_planet);
+      data.changed = true;
+      // println("data changed");
+     // println("planet.size " + planet.size); 
+     // println("edit_planet.size " +data.edit_planet.size); 
     }
   }
 

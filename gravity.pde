@@ -46,7 +46,6 @@ void setup()
     setupControls();
     
     data.LoadSettings("./Settings/default.json");
-    data.name = "default";
     
     dataGui.setGUIValues();
     
@@ -58,10 +57,9 @@ void setupControls()
     cp5 = new ControlP5(this); 
     cp5.getTab("default").setLabel("Hide GUI");
     
+    // special tab
     addFileTab();
-    
     dataGui.Init();
-    dataGui.setupControls();     
 }
 
 void draw()
@@ -70,20 +68,23 @@ void draw()
   
     background(data.style.backgroundColor.col);
     
-    if (data.any_change())
+   // if (data.any_change())
       generator.buildLines();   
     
     // recenter
     pushMatrix();
     translate(width/2, height/2);
-
+    
     data.planets.draw();
     
     strokeWeight(data.style.lineWidth);   
     stroke(data.style.lineColor.col);
       
     smooth();
+
     generator.draw();
+    // adds UI draws
+    dataGui.draw();
 
     popMatrix();
     end_draw();
