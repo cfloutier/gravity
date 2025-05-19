@@ -49,14 +49,14 @@ void addFileTab()
   scale_slider.setLabel("Global Scale")
       .setPosition(xPos, yPos)
       .setSize(200, heightButton)
-      .setRange(-5, 5)
+      .setRange(-9, 9)
       .moveTo("Files")
       .setValue(0)
       .getCaptionLabel().align(ControlP5.LEFT, ControlP5.TOP_OUTSIDE).setPaddingX(0);
       
  xPos += 210;
       
-  cp5.addButton("ResetScale")
+  cp5.addButton("Reset_Scale")
     .setPosition(xPos, yPos)
     .setSize(widthButton, heightButton)
     .moveTo("Files");
@@ -65,7 +65,7 @@ void addFileTab()
 
 ScaleSlider scale_slider;
 
-void ResetScale()
+void Reset_Scale()
 {
   
   scale_slider.setValue(0);

@@ -1,0 +1,58 @@
+{
+  "Planets": {
+    "planet_0": {
+      "size": 50,
+      "gravity": 500,
+      "drag": 1,
+      "center_y": 316.27587890625,
+      "center_x": -239.7666015625
+    },
+    "planet_1": {
+      "size": 30.000001907348633,
+      "gravity": 276.66668701171875,
+      "drag": 1,
+      "center_y": 265.773193359375,
+      "center_x": 400.99267578125
+    },
+    "planet_2": {
+      "size": 10,
+      "gravity": 100,
+      "drag": 1,
+      "center_y": 115.581298828125,
+      "center_x": -405.31982421875
+    },
+    "planet_3": {
+      "size": 103.33333587646484,
+      "gravity": 100,
+      "drag": 1,
+      "center_y": -201.639892578125,
+      "center_x": -360.0263671875
+    },
+    "planet_4": {
+      "size": 176.6666717529297,
+      "gravity": 446.666748046875,
+      "drag": 1,
+      "center_y": -160.6065673828125,
+      "center_x": 398.02001953125
+    },
+    "nb_items": 5,
+    "current_index": 4
+  },
+  "Style": {
+    "backgroundColor": -16118253,
+    "lineColor": -1319184,
+    "lineWidth": 0.23333333432674408
+  },
+  "Particles": {
+    "nb_particles": 444,
+    "max_radius": 410,
+    "steps_size": 6.760000228881836,
+    "max_distance_to_page": 630,
+    "min_radius": 180,
+    "min_distance_to_planets": 5,
+    "max_speed": -1.253333330154419,
+    "draw": true,
+    "min_speed": -1.2799999713897705,
+    "steps": 100
+  }
+}

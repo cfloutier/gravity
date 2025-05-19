@@ -69,7 +69,7 @@ class Particle {
 
             if (distance < planet.size)
             {
-              force.add( -speed.x*0.01, -speed.y*0.01 );
+              force.add( -speed.x/(1+planet.drag), -speed.y/(1+planet.drag) );
               
             }
             

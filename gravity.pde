@@ -91,22 +91,3 @@ void draw()
     data.particles.changed = false;
 }
 
-
-
-
-void mousePressed() {
-    //println("mouseX " + mouseX);
-    //println("over " + cp5.isMouseOver());
-    //println("over " + cp5.controlWindow.currentTab()   );
-    
-    
-
-}
-
-void mouseDragged() {
-  
-}
-
-void mouseReleased() {
-  
-}

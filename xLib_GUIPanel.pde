@@ -40,7 +40,7 @@ class MainPanel
     for (GUIPanel panel : panels)
     {
       panel.Init(); //<>// //<>//
-      panel.setupControls(); //<>//
+      panel.setupControls(); //<>// //<>//
     }
   }
 
@@ -78,6 +78,57 @@ class MainPanel
       panel.draw();
     }
   }
+
+  GUIPanel dragging_panel;
+
+  void mousePressed()
+  {
+    if (cp5.isMouseOver())
+      return;
+
+    println("mouse pressed " + mouseX);
+    for (GUIPanel panel : panels)
+    {
+      if (!panel.tab.isActive())
+        continue;
+
+      if (panel.mousePressed())
+      {
+        dragging_panel = panel;
+        return;
+      }
+    }
+
+  }
+
+  void mouseDragged()
+  {
+    if (dragging_panel != null)
+    {
+      dragging_panel.mouseDragged();
+    }
+  }
+
+  void mouseReleased() {
+
+    if (dragging_panel != null)
+    {
+      dragging_panel.mouseReleased();
+      dragging_panel = null;
+    }
+  }
+}
+
+void mousePressed() {
+    dataGui.mousePressed();
+}
+
+void mouseDragged() {
+    dataGui.mouseDragged();
+}
+
+void mouseReleased() {
+    dataGui.mouseReleased();
 }
 
 
@@ -117,6 +168,8 @@ class GUIPanel implements ControlListener
     xPos = StartX;
   }
 
+  //////////////////////////// virtual functions ////////////////////////////
+
   void setupControls()
   {
     // create controls here
@@ -145,6 +198,25 @@ class GUIPanel implements ControlListener
   {
     // can be optionnally setup to draw figure in the drawing
   }
+
+  boolean mousePressed()
+  {
+    // return true to start a drag
+    return false; 
+  }
+
+  void mouseDragged()
+  {
+    // called if drag has started on each mouse move
+
+  }
+
+  void mouseReleased()
+  {
+    // called if drag has started on mouse up
+  }
+
+  //////////////////////////// Association with data changes ////////////////////////////
 
   public void onUIChanged()
   {
@@ -185,6 +257,8 @@ class GUIPanel implements ControlListener
     if (tab_name == pageName)
       onUIChanged();
   }
+
+  ////////////////// Controls ///////////////////////////
 
   Textlabel inlineLabel(String content, int width)
   {
