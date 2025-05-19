@@ -41,7 +41,7 @@ void setup()
     data = new GravityData();
     dataGui = new DataGUI(data);
     
-    generator = new ParticlesGenerator(data.particles);
+    generator = new ParticlesGenerator(data);
 
     setupControls();
     
@@ -68,12 +68,14 @@ void draw()
   
     background(data.style.backgroundColor.col);
     
-    if (data.particles.changed)
+    if (data.any_change())
       generator.buildLines();   
     
     // recenter
     pushMatrix();
     translate(width/2, height/2);
+
+    data.planets.draw();
     
     strokeWeight(data.style.lineWidth);   
     stroke(data.style.lineColor.col);

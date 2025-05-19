@@ -1,8 +1,12 @@
 class DataPlanets extends GenericDataClass
 {
+  boolean show = true;
   // shown in gui
   int current_index = 0;
   ArrayList<DataPlanet> planets = new ArrayList<DataPlanet>();
+  
+  float max_gravity = 500;
+  
 
   DataPlanet edit_planet = new DataPlanet();
 
@@ -10,8 +14,7 @@ class DataPlanets extends GenericDataClass
     super("Planets");
   }
 
-
-  int count()
+  int nb_planets()
   {
     return planets.size();
   }
@@ -19,7 +22,7 @@ class DataPlanets extends GenericDataClass
   public void LoadJson(JSONObject json) {
     if (json == null) return;
 
-    int nb_planets = json.getInt("nb_planets", 0);
+    int nb_planets = json.getInt("nb_planets", 0); //<>//
     current_index = json.getInt("current_index", 0);
     for (int i = 0 ; i < nb_planets ; i++)
     {
@@ -33,7 +36,7 @@ class DataPlanets extends GenericDataClass
     JSONObject json = new JSONObject();
     
     int nb_planets = planets.size();
-    json.getInt("nb_planets", nb_planets);
+    json.setInt("nb_planets", nb_planets);
 
     for (int i = 0 ; i < nb_planets ; i++)
     {
@@ -45,6 +48,36 @@ class DataPlanets extends GenericDataClass
 
     return json;
   }
+
+  void draw()
+  {
+    if (!show)
+      return;
+
+    strokeWeight(1);   
+    color gray = #A0A0A0;
+    
+    color red =#ff3300;
+    color green = #1bfa1f;
+      
+    for (int i = 0 ; i < nb_planets() ; i++)
+    {
+      DataPlanet planet = planets.get(i);
+      
+      stroke(data.style.lineColor.col);
+      
+      if (current_index == i)
+      {
+        float ratio = inverseLerp(-max_gravity, max_gravity, planet.gravity);
+        color c = lerpColor(red, green, ratio);
+        stroke(c);
+      }
+      else
+        stroke(gray);
+
+      circle(planet.center_x, planet.center_y, planet.size);
+    }
+  }
 }
 
 class DataPlanet extends GenericDataClass
@@ -52,15 +85,12 @@ class DataPlanet extends GenericDataClass
   float center_x = 0;
   float center_y = 0;
 
-  float size = 0;
+  float size = 10;
   float gravity = 100;
 
     DataPlanet() {
     super("Planet");
   }
-  
-  
-  
 }
 
 class PlanetsGui extends GUIPanel
@@ -77,6 +107,8 @@ class PlanetsGui extends GUIPanel
   Textlabel current_Planet;
   Button center_button;
 
+
+
   Slider center_x;
   Slider center_y;
   Slider size;
@@ -88,8 +120,8 @@ class PlanetsGui extends GUIPanel
 
     current_Planet = addLabel("current Planet : 0/0");
     nextLine();
+    addToggle("show", "Show", false);
     space();
-
     addButton("Prev").plugTo(this, "prev");
     addButton("Remove").plugTo(this, "remove");
     addButton("Add").plugTo(this, "add");
@@ -106,12 +138,12 @@ class PlanetsGui extends GUIPanel
     space();
 
     size  = addSlider("size", "Size", data.edit_planet, 0, 1000, true);
-    gravity = addSlider("gravity", "Gravity", data.edit_planet, -100, 100, true);
+    gravity = addSlider("gravity", "Gravity", data.edit_planet, -data.max_gravity, data.max_gravity, true);
   }
 
   void prev()
   {
-    if (data.count() == 0)
+    if (data.nb_planets() == 0)
     {
       data.current_index = 0;      
     }
@@ -119,7 +151,7 @@ class PlanetsGui extends GUIPanel
     {
       data.current_index = data.current_index -1;
       if (data.current_index < 0)
-        data.current_index = data.count() -1;
+        data.current_index = data.nb_planets() -1;
 
     }
 
@@ -128,14 +160,14 @@ class PlanetsGui extends GUIPanel
 
   void next()
   {
-    if (data.count() == 0)
+    if (data.nb_planets() == 0)
     {
       data.current_index = 0;      
     }
     else
     {
       data.current_index = data.current_index + 1;
-      if (data.current_index >= data.count())
+      if (data.current_index >= data.nb_planets())
         data.current_index = 0;
     }
 
@@ -144,8 +176,8 @@ class PlanetsGui extends GUIPanel
 
   void fix_index()
   {
-     if (data.current_index >= data.count())
-      data.current_index = data.count() -1;
+     if (data.current_index >= data.nb_planets())
+      data.current_index = data.nb_planets() -1;
     else if (data.current_index < 0)
       data.current_index = 0;
   }
@@ -160,7 +192,7 @@ class PlanetsGui extends GUIPanel
 
   void remove()
   {
-    if (data.count() == 0)
+    if (data.nb_planets() == 0)
       return;
 
     fix_index();
@@ -173,7 +205,7 @@ class PlanetsGui extends GUIPanel
 
   void updatePlanet()
   {
-    if (data.count() == 0)
+    if (data.nb_planets() == 0)
     {
       center_button.hide();
       center_x.hide();
@@ -202,7 +234,7 @@ class PlanetsGui extends GUIPanel
       size.setValue(planet.size);
       gravity.setValue(planet.gravity);
 
-      current_Planet.setText("Planet " + (data.current_index + 1) + " / " + data.count());
+      current_Planet.setText("Planet " + (data.current_index + 1) + " / " + data.nb_planets());
     }
     else
     {
@@ -229,14 +261,5 @@ class PlanetsGui extends GUIPanel
     data.edit_planet.center_x = 0;
     data.edit_planet.center_y = 0;
   }
-
-
-
-
-
-
-
-
-
 
 }

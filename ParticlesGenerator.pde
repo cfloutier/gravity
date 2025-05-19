@@ -28,17 +28,19 @@ class Particle {
     PVector position;
     PVector speed;
     
-    boolean invalid = false;
+    boolean stopped = false;
 
     Line line = new Line();
-
-    Particle(DataParticles data)
+    GravityData data = null;
+    
+    Particle(GravityData data)
     {
-        float radius = random(data.min_radius, data.max_radius);
+        this.data = data;
+        float radius = random(data.particles.min_radius, data.particles.max_radius);
         float direction = random(PI*2);
 
         float speed_direction = random(PI*2);
-        float speed_v = random(data.min_speed, data.max_speed);
+        float speed_v = random(data.particles.min_speed, data.particles.max_speed);
         
         //println("radius " + radius);
 
@@ -48,31 +50,54 @@ class Particle {
         line.add(position);
     }
 
-    void move(DataParticles data)
+    PVector computeForce()
     {
-        if (invalid)
+        PVector force = new PVector(0,0);
+        for (DataPlanet planet: data.planets.planets)
+        {
+            PVector delta = new PVector(planet.center_x-position.x,planet.center_y-position.y);
+            float distance_2 = delta.magSq();
+            float distance = sqrt(distance_2);
+
+            if (distance < data.particles.cleanup_min_radius)
+            {
+              stopped = true;
+              return new PVector(0,0);
+            }
+
+            if (distance < planet.size)
+            {
+              force.add( -speed.x*0.01, -speed.y*0.01 );
+              
+            }
+            
+
+            delta.normalize();
+
+
+            float power = planet.gravity/distance_2;
+            force.add(power*delta.x, power*delta.y );
+        }
+
+        return force;
+    }
+
+    void move()
+    {
+        if (stopped)
           return;
 
-        float distance_2 = position.x*position.x + position.y*position.y;
-        float distance = sqrt(distance_2) ;
-        
-        if (data.cleanup)
-        {
-          if (distance < data.cleanup_min_radius || distance > data.cleanup_max_radius)
-          {
-            invalid = true;
-            return;
-          }
-          
-        }
-        
-        PVector direction = new PVector(-position.x/distance, -position.y/distance);
-        float power = data.gravity/distance_2;
-        PVector force = new PVector(direction.x*power, direction.y*power);
+        PVector force = computeForce();
        
-        speed.x += force.x * data.steps_size;
-        speed.y += force.y * data.steps_size;
-        position = new PVector(position.x + speed.x * data.steps_size, position.y + speed.y * data.steps_size);
+        speed.x += force.x * data.particles.steps_size;
+        speed.y += force.y * data.particles.steps_size;
+        position = new PVector(position.x + speed.x * data.particles.steps_size, position.y + speed.y * data.particles.steps_size);
+        
+        if (position.mag() > data.particles.cleanup_max_radius)
+        {
+          stopped = true;
+          return;
+        }
 
         line.add(position);      
     }
@@ -92,9 +117,9 @@ class ParticlesGenerator {
 
   ArrayList<Particle> particles =  new ArrayList<Particle>();
 
-  DataParticles data;
+  GravityData data;
 
-  public ParticlesGenerator(DataParticles data) {
+  public ParticlesGenerator(GravityData data) {
     this.data = data;
   }
 
@@ -104,8 +129,8 @@ class ParticlesGenerator {
       Particle p = particles.get(i);
       p.draw();
     }
-  }
 
+  }
 
   void buildLines() {
 
@@ -113,16 +138,16 @@ class ParticlesGenerator {
     
     randomSeed(0);
     
-    for (int i = 0 ; i < data.nb_particles; i++)
+    for (int i = 0 ; i < data.particles.nb_particles; i++)
     {
         particles.add( new Particle(data) );  
     }
     
-    for (int i = 0 ; i < data.steps; i++)
+    for (int i = 0 ; i < data.particles.steps; i++)
     {
         for (Particle p: particles)
         {
-            p.move( data );
+            p.move();
             //p.print();
         }
     }
