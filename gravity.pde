@@ -59,6 +59,8 @@ void setupControls()
     cp5.getTab("default").setLabel("Hide GUI");
     
     addFileTab();
+    
+    dataGui.Init();
     dataGui.setupControls();     
 }
 
@@ -87,4 +89,24 @@ void draw()
     end_draw();
 
     data.particles.changed = false;
+}
+
+
+
+
+void mousePressed() {
+    //println("mouseX " + mouseX);
+    //println("over " + cp5.isMouseOver());
+    //println("over " + cp5.controlWindow.currentTab()   );
+    
+    
+
+}
+
+void mouseDragged() {
+  
+}
+
+void mouseReleased() {
+  
 }

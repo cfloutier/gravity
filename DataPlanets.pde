@@ -1,8 +1,6 @@
 class DataPlanets extends DataList
 {
   boolean show = true;
-  // shown in gui
-
   float max_gravity = 500;
   
   DataPlanet edit_planet = new DataPlanet();
@@ -27,7 +25,7 @@ class DataPlanets extends DataList
     color red =#ff3300;
     color green = #1bfa1f;
       
-    for (int i = 0 ; i < size() ; i++) //<>//
+    for (int i = 0 ; i < size() ; i++)
     {
       DataPlanet planet = (DataPlanet) items.get(i);
       
@@ -158,10 +156,7 @@ class PlanetsGui extends GUIListPanel
   void setGUIValues()
   {
     updateCurrentItem();
-    
-    show.setValue(sata.shwo);
-    
-    
+    show.setValue(data.show);
   }
   
   void center()

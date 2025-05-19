@@ -24,15 +24,24 @@ class GravityData extends DataGlobal
     
 }
 
-class DataGUI
+class DataGUI extends MainPanel
 {
    public DataGUI(GravityData data)
   {
     this.data = data;
+    
     particles_ui = new ParticlesGUI(data.particles); 
     planets_gui = new PlanetsGui(data.planets); 
     style_gui = new StyleGUI(data.style); 
-  }  
+  }
+  
+  void Init()
+  {
+    addTab(particles_ui);
+    addTab(planets_gui);
+    addTab(style_gui);
+    super.Init();
+  }
 
   DataGlobal data;
   ParticlesGUI particles_ui;

@@ -3,8 +3,6 @@ class DataParticles extends GenericData
 {
   DataParticles() {
     super("Particles");
-    
-    println("DataParticles DataParticles"); //<>//
   }
 
   boolean draw = true;
@@ -24,20 +22,9 @@ class DataParticles extends GenericData
   float min_distance_to_planets = 5;
   float max_distance_to_page = 2000;
   
-  
   public void LoadJson(JSONObject json) {
-    
-    println("DataParticles LoadJson before");
-    println("max_distance_to_page " + max_distance_to_page);
-    
     super.LoadJson(json);
-
-    println("DataParticles LoadJson after");
-    println("max_distance_to_page " + max_distance_to_page); 
   }
-  
-  
-
 }
 
 class ParticlesGUI extends GUIPanel
@@ -103,8 +90,6 @@ class ParticlesGUI extends GUIPanel
 
   void setGUIValues()
   {
-    println("DataParticles.setGUIValues");
-
     draw.setValue(data.draw);
     nb_particles.setValue(data.nb_particles);
     steps.setValue(data.steps);
@@ -117,9 +102,6 @@ class ParticlesGUI extends GUIPanel
     max_speed.setValue(data.max_speed);
 
     min_distance_to_planets.setValue(data.min_distance_to_planets);
-    
-    
-    println("data.max_distance_to_page " + data.max_distance_to_page);
     max_distance_to_page.setValue(data.max_distance_to_page);
   }
 }

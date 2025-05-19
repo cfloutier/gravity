@@ -20,6 +20,36 @@ static class LabelsHandler
   }
 }
 
+class MainPanel implements ControlListener
+{
+  ArrayList<GUIPanel> panels = new ArrayList<GUIPanel>();
+  String activeTab = "";
+  MainPanel()
+  {
+    
+  }
+  
+  void addTab(GUIPanel panel)
+  {
+    panels.add(panel);
+  }
+  
+  void Init()
+  {
+    cp5.getTabs().addListener(this);
+  }
+
+  public void controlEvent(ControlEvent theControlEvent) {  
+
+    println("controlEvent " + theControlEvent);
+    if (theControlEvent.isTab()) {
+      activeTab = theControlEvent.getTab().getName(); //<>//
+      println("active tab is " + activeTab);
+    }
+  }
+
+}
+
 
 class GUIPanel implements ControlListener
 {
@@ -40,7 +70,7 @@ class GUIPanel implements ControlListener
   GUIPanel(String pageName, GenericData data)
   {
     this.pageName = pageName;
-    this.associated_data = data; //<>//
+    this.associated_data = data;
   }
   
   Tab tab;
