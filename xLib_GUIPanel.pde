@@ -34,15 +34,19 @@ class GUIPanel implements ControlListener
   int heightCtrl = 20;
   
   
-  GenericDataClass associated_data;
+  GenericData associated_data;
+  
+  
+  GUIPanel(String pageName, GenericData data)
+  {
+    this.pageName = pageName;
+    this.associated_data = data; //<>//
+  }
   
   Tab tab;
 
-  void Init(String pageName, GenericDataClass data)
+  void Init()
   {
-    this.pageName = pageName; //<>//
-    this.associated_data = data;
-    
     tab = cp5.addTab(pageName);
     //print (" tab " + tab);
     println("add tab " + pageName);  
@@ -94,8 +98,6 @@ class GUIPanel implements ControlListener
         onUIChanged();
   }
 
-
-
   Textlabel inlineLabel(String content, int width)
   {
     Textlabel l = cp5.addTextlabel("Label" + this.pageName + indexControler)
@@ -113,9 +115,6 @@ class GUIPanel implements ControlListener
     return l;
   }
 
-
-
-  
   Textlabel addLabel(String content)
   {
     yPos += 10;

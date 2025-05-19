@@ -1,4 +1,4 @@
-class Style extends GenericDataClass
+class Style extends GenericData
 {
   Style(){ super("Style"); }
   
@@ -34,6 +34,12 @@ class StyleGUI extends GUIPanel
 {
   Style style;
   
+  StyleGUI(Style dataStyle)
+  {
+    super("Style", dataStyle);
+    this.style = dataStyle;
+  }
+  
   Slider lineWidth;
   ColorGroup backgroundColor;
   ColorGroup lineColor;
@@ -45,8 +51,8 @@ class StyleGUI extends GUIPanel
 
   void setupControls()
   {
-    style = data.style;
-    super.Init("Style", style);
+    super.Init();
+    
     lineWidth = addSlider("lineWidth", "Line Width", 0, 5, false);
     lineColor = addColorGroup("Line Color", style.lineColor);
     backgroundColor = addColorGroup("background Color", style.backgroundColor);

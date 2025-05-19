@@ -1,6 +1,6 @@
 {
   "Planets": {
-    "nb_planets": 5,
+    "nb_items": 5,
     "planet_0": {
       "size": 50,
       "gravity": 500,

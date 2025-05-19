@@ -1,13 +1,10 @@
 import java.lang.reflect.Field;
 
 
-
-
-
 // classe de base des données sauvegardable
-class GenericDataClass
+class GenericData
 {
-  GenericDataClass(String chapter_name)
+  GenericData(String chapter_name)
   {
     this.chapter_name = chapter_name;
   }
@@ -43,7 +40,7 @@ class GenericDataClass
     Field[] fields = this.getClass().getDeclaredFields();
 
     for (Field field : fields) {
-      try {
+      try { //<>//
         field.setAccessible(true); // Allow access to private fields if necessary
         String name = field.getName();
         if (name == "changed" || name =="this$0")
@@ -105,7 +102,7 @@ class GenericDataClass
     return json;
   }
   
-    void CopyFrom(GenericDataClass src)
+    void CopyFrom(GenericData src)
   {
     Field[] fields = this.getClass().getDeclaredFields();
     for (Field field : fields) {
@@ -118,18 +115,13 @@ class GenericDataClass
         }
         
         field.set(this, field.get(src));
-        
-   
       }
       catch (IllegalAccessException e) {
         e.printStackTrace(); // Handle exceptions gracefully
       }
     }
-    
   }
-  
 }
-
 
 
 
@@ -147,6 +139,11 @@ class DataGlobal
 
   float width = 800;
   float height = 600;
+  
+  void reset()
+  {
+    println("error calling base reset");
+  }
 
   void setSize(float width, float height)
   {
@@ -163,9 +160,9 @@ class DataGlobal
     }
   }
 
-  ArrayList<GenericDataClass> chapters = new ArrayList<GenericDataClass>();
+  ArrayList<GenericData> chapters = new ArrayList<GenericData>();
 
-  void addChapter(GenericDataClass data_chapter)
+  void addChapter(GenericData data_chapter)
   {
     chapters.add(data_chapter);
   }
@@ -185,12 +182,13 @@ class DataGlobal
   void LoadSettings(String path)
   {
     println("loading settings : " + path);
+    reset();
     settings_path = path;
-
+ //<>//
     data.name = getFileNameWithoutExtension(path);
     JSONObject json = loadJSONObject(path);
 
-    for (GenericDataClass chapter : chapters) {
+    for (GenericData chapter : chapters) {
       chapter.LoadJson(json.getJSONObject(chapter.chapter_name));
     }
     
@@ -202,7 +200,7 @@ class DataGlobal
     println("Save settings " + path);
     JSONObject json = new JSONObject();
 
-    for (GenericDataClass chapter : chapters) {
+    for (GenericData chapter : chapters) {
       json.setJSONObject(chapter.chapter_name, chapter.SaveJson());
     }
 
@@ -227,7 +225,7 @@ class DataGlobal
     if (changed)
       return true;
 
-    for (GenericDataClass chapter : chapters) {
+    for (GenericData chapter : chapters) {
       if (chapter.changed)
         return true;
     }
@@ -238,7 +236,7 @@ class DataGlobal
   void reset_all_changes()
   {
     changed = false;
-    for (GenericDataClass chapter : chapters) {
+    for (GenericData chapter : chapters) {
       chapter.changed = false;
     }
     

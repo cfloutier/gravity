@@ -53,13 +53,15 @@ class Particle {
     PVector computeForce()
     {
         PVector force = new PVector(0,0);
-        for (DataPlanet planet: data.planets.planets)
+        for (GenericData item: data.planets.items)
         {
+          DataPlanet planet = (DataPlanet) item;
+          
             PVector delta = new PVector(planet.center_x-position.x,planet.center_y-position.y);
             float distance_2 = delta.magSq();
             float distance = sqrt(distance_2);
 
-            if (distance < data.particles.cleanup_min_radius)
+            if (distance < data.particles.min_distance_to_planets)
             {
               stopped = true;
               return new PVector(0,0);
@@ -87,13 +89,13 @@ class Particle {
         if (stopped)
           return;
 
-        PVector force = computeForce();
+        PVector force = computeForce();  
        
         speed.x += force.x * data.particles.steps_size;
         speed.y += force.y * data.particles.steps_size;
         position = new PVector(position.x + speed.x * data.particles.steps_size, position.y + speed.y * data.particles.steps_size);
         
-        if (position.mag() > data.particles.cleanup_max_radius)
+        if (position.mag() > data.particles.max_distance_to_page)
         {
           stopped = true;
           return;

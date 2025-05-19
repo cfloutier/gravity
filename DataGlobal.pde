@@ -2,18 +2,26 @@ import controlP5.*;
 
 class GravityData extends DataGlobal
 {
-    DataParticles particles  = new DataParticles();
+    DataParticles particles = new DataParticles();
     DataPlanets planets = new DataPlanets();
-
     Style style = new Style();
 
     GravityData()
     {
+      reset();
+      
       addChapter(style);
       addChapter(particles);
       addChapter(planets);
     }
-
+    
+    void reset()
+    {
+      particles.CopyFrom(new DataParticles());
+      planets.CopyFrom(new DataPlanets());
+      style.CopyFrom(new Style());
+    }
+    
 }
 
 class DataGUI
@@ -23,8 +31,8 @@ class DataGUI
     this.data = data;
     particles_ui = new ParticlesGUI(data.particles); 
     planets_gui = new PlanetsGui(data.planets); 
-    style_gui = new StyleGUI(); 
-  }
+    style_gui = new StyleGUI(data.style); 
+  }  
 
   DataGlobal data;
   ParticlesGUI particles_ui;
@@ -44,9 +52,9 @@ class DataGUI
   
   void setupControls()
   { 
-    particles_ui.setupControls(  ) ;
     style_gui.setupControls();  
-    planets_gui.setupControls();  
+    particles_ui.setupControls(  ) ;
+    planets_gui.setupControls(); 
     cp5.getTab("Planets").bringToFront();
   }
   

@@ -1,6 +1,5 @@
 {
   "Planets": {
-    "nb_planets": 2,
     "planet_0": {
       "size": 50,
       "gravity": 500,
@@ -13,6 +12,7 @@
       "center_y": -226.6666259765625,
       "center_x": 373.33349609375
     },
+    "nb_items": 2,
     "current_index": 1
   },
   "Style": {
@@ -21,17 +21,15 @@
     "lineWidth": 0.23333333432674408
   },
   "Particles": {
-    "nb_particles": 8,
+    "nb_particles": 18,
     "max_radius": 410,
-    "cleanup": true,
-    "cleanup_min_radius": 26.666667938232422,
-    "gravity": 213.33334350585938,
-    "steps_size": 6.760000228881836,
+    "steps_size": 1.0989999771118164,
+    "max_distance_to_page": 2000,
     "min_radius": 180,
+    "min_distance_to_planets": 5,
     "max_speed": 1.3066668510437012,
     "draw": true,
-    "min_speed": 0.17333340644836426,
-    "steps": 694,
-    "cleanup_max_radius": 553.3333129882812
+    "min_speed": 0.38666677474975586,
+    "steps": 3499
   }
 }
