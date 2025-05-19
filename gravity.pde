@@ -74,8 +74,7 @@ void draw()
     // recenter
     pushMatrix();
     translate(width/2, height/2);
-    
-    data.planets.draw();
+    scale(data.global_scale,data.global_scale);
     
     strokeWeight(data.style.lineWidth);   
     stroke(data.style.lineColor.col);

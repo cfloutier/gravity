@@ -40,7 +40,7 @@ class GenericData
     Field[] fields = this.getClass().getDeclaredFields();
 
     for (Field field : fields) {
-      try { //<>//
+      try { //<>// //<>//
         field.setAccessible(true); // Allow access to private fields if necessary
         String name = field.getName();
         if (name == "changed" || name =="this$0")
@@ -123,8 +123,6 @@ class GenericData
   }
 }
 
-
-
 class DataGlobal
 {
   String name = "";
@@ -139,6 +137,7 @@ class DataGlobal
 
   float width = 800;
   float height = 600;
+  float global_scale = 1;
   
   void reset()
   {
@@ -185,7 +184,7 @@ class DataGlobal
     reset();
     settings_path = path;
  //<>//
-    data.name = getFileNameWithoutExtension(path);
+    data.name = getFileNameWithoutExtension(path); //<>//
     JSONObject json = loadJSONObject(path);
 
     for (GenericData chapter : chapters) {

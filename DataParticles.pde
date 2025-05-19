@@ -4,7 +4,7 @@ class DataParticles extends GenericData
   DataParticles() {
     super("Particles");
   }
-
+ //<>//
   boolean draw = true;
   
   int nb_particles = 100;
@@ -56,31 +56,33 @@ class ParticlesGUI extends GUIPanel
   {
     super.Init();
 
-    draw = addToggle("draw", "Draw", false);
+    draw = addToggle("draw", "Draw");
+    nextLine();
 
-    nb_particles = addIntSlider("nb_particles", "Nb Particles", 1, 1000, false);
-    space();
-    steps = addIntSlider("steps", "Steps", 100, 10000, true);
-    steps_size = addSlider("steps_size", "steps size", 0.1, 100, false);
+    nb_particles = addIntSlider("nb_particles", "Nb Particles", 1, 1000);
+    steps = addIntSlider("steps", "Steps", 100, 10000);
+    steps_size = addSlider("steps_size", "steps size", 0.1, 100);
     
+    nextLine();
     space();
 
-    min_radius = addSlider("min_radius", "Spawn Min Radius", 0, 1000, true);
-    max_radius = addSlider("max_radius", "Spawn Max Radius", 0, 1000, false);
-    
-    space();
-    
-    min_speed = addSlider("min_speed", "Spawn Min Speed", -2, 2, true);
-    max_speed = addSlider("max_speed", "Spawn Max Speed", -2, 2, false);
-    
-    space();space();
-    
-    min_distance_to_planets = addSlider("min_distance_to_planets", "Min Distance to Planets", 5, 100, true);
+    min_radius = addSlider("min_radius", "Spawn Min Radius", 0, 1000);
+    max_radius = addSlider("max_radius", "Spawn Max Radius", 0, 1000);
     
     nextLine();
     space();
     
-    max_distance_to_page = addSlider("max_distance_to_page", "Max Distance Page", 0, 3000, false);
+    min_speed = addSlider("min_speed", "Spawn Min Speed", -2, 2);
+    max_speed = addSlider("max_speed", "Spawn Max Speed", -2, 2);
+    
+    space();
+    
+    min_distance_to_planets = addSlider("min_distance_to_planets", "Min Distance to Planets", 5, 100);
+    
+    nextLine();
+    space();
+    
+    max_distance_to_page = addSlider("max_distance_to_page", "Max Distance Page", 0, 3000);
   }
 
 

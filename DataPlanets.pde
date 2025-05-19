@@ -1,12 +1,17 @@
 class DataPlanets extends DataList
 {
-  boolean show = true;
+  
   float max_gravity = 500;
   
   DataPlanet edit_planet = new DataPlanet();
 
   DataPlanets() {
     super("Planets", "planet");
+  }
+
+  void reset()
+  {
+    
   }
   
   DataPlanet newItem()
@@ -16,16 +21,13 @@ class DataPlanets extends DataList
 
   void draw()
   {
-    if (!show)
-      return;
-
     strokeWeight(1);   
     color gray = #A0A0A0;
     
     color red =#ff3300;
     color green = #1bfa1f;
       
-    for (int i = 0 ; i < size() ; i++)
+    for (int i = 0 ; i < size() ; i++) //<>//
     {
       DataPlanet planet = (DataPlanet) items.get(i);
       
@@ -79,7 +81,6 @@ class PlanetsGui extends GUIListPanel
   Slider size;
   Slider gravity;
   
-  Toggle show;
   
   void setupControls()
   {
@@ -87,8 +88,10 @@ class PlanetsGui extends GUIListPanel
 
     current_Planet = addLabel("current Planet : 0/0");
     nextLine();
-    show = addToggle("show", "Show", false);
+    
     space();
+    
+    
     addButton("Prev").plugTo(this, "prev");
     addButton("Remove").plugTo(this, "remove");
     addButton("Add").plugTo(this, "add");
@@ -98,14 +101,14 @@ class PlanetsGui extends GUIListPanel
     space();
 
     center_button = addButton("Center").plugTo(this, "center");
-    center_x = addSlider("center_x", "X", data.edit_planet, -2000, 2000, true);
-    center_y  = addSlider("center_y", "Y", data.edit_planet, -2000, 2000, true);
+    center_x = addSlider("center_x", "X", data.edit_planet, -2000, 2000);
+    center_y  = addSlider("center_y", "Y", data.edit_planet, -2000, 2000);
 
     nextLine();
     space();
 
-    size  = addSlider("size", "Size", data.edit_planet, 0, 1000, true);
-    gravity = addSlider("gravity", "Gravity", data.edit_planet, -data.max_gravity, data.max_gravity, true);
+    size  = addSlider("size", "Size", data.edit_planet, 0, 1000);
+    gravity = addSlider("gravity", "Gravity", data.edit_planet, -data.max_gravity, data.max_gravity);
   }
 
   void updateCurrentItem()
@@ -163,7 +166,6 @@ class PlanetsGui extends GUIListPanel
   void setGUIValues()
   {
     updateCurrentItem();
-    show.setValue(data.show);
   }
   
   void center()
@@ -173,6 +175,12 @@ class PlanetsGui extends GUIListPanel
     
     data.edit_planet.center_x = 0;
     data.edit_planet.center_y = 0;
+  }
+
+  void draw()
+  {
+    if (tab.isActive())
+      data.draw();
   }
 
 }

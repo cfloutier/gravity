@@ -44,16 +44,16 @@ class StyleGUI extends GUIPanel
   ColorGroup backgroundColor;
   ColorGroup lineColor;
 
-  void setGUIValues()  
+  void setGUIValues()    
   {
     lineWidth.setValue(style.lineWidth);
-  }
+  }  
 
   void setupControls()
   {
     super.Init();
     
-    lineWidth = addSlider("lineWidth", "Line Width", 0, 5, false);
+    lineWidth = addSlider("lineWidth", "Line Width", 0, 5);
     lineColor = addColorGroup("Line Color", style.lineColor);
     backgroundColor = addColorGroup("background Color", style.backgroundColor);
   }

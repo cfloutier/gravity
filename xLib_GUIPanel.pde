@@ -7,13 +7,13 @@ static final int StartY = 20;
 
 static class LabelsHandler
 {
-  static public ArrayList<Textlabel> labels = new ArrayList<Textlabel>(); 
+  static public ArrayList<Textlabel> labels = new ArrayList<Textlabel>();
   static int label_color;
 
   static void set_labels_colors(int _color)
   {
     label_color = _color;
-    for (Textlabel label: labels)
+    for (Textlabel label : labels)
     {
       label.setColorValue(label_color);
     }
@@ -26,22 +26,21 @@ class MainPanel
   String activeTab = "";
   MainPanel()
   {
-    
   }
-  
+
   void addTab(GUIPanel panel)
   {
     panels.add(panel);
   }
-  
+
   void Init()
   {
     // must be called after addTabs
 
     for (GUIPanel panel : panels)
     {
-      panel.Init();
-      panel.setupControls();
+      panel.Init(); //<>// //<>//
+      panel.setupControls(); //<>//
     }
   }
 
@@ -70,7 +69,7 @@ class MainPanel
 
   void draw()
   {
-    // checks if it's not an export 
+    // checks if it's not an export
     if (record)
       return;
 
@@ -79,16 +78,13 @@ class MainPanel
       panel.draw();
     }
   }
-
-
-
 }
 
 
 class GUIPanel implements ControlListener
 {
   String pageName;
-  
+
   float xPos = 0;
   float yPos = 0;
 
@@ -96,24 +92,24 @@ class GUIPanel implements ControlListener
 
   int widthCtrl = 300;
   int heightCtrl = 20;
-  
-  
+
+
   GenericData associated_data;
-  
-  
+
+
   GUIPanel(String pageName, GenericData data)
   {
     this.pageName = pageName;
     this.associated_data = data;
   }
-  
+
   Tab tab;
 
   void Init()
   {
     tab = cp5.addTab(pageName);
     //print (" tab " + tab);
-    println("add tab " + pageName);  
+    println("add tab " + pageName);
 
     cp5.addListener(this);
 
@@ -148,48 +144,46 @@ class GUIPanel implements ControlListener
   void draw()
   {
     // can be optionnally setup to draw figure in the drawing
-
   }
 
   public void onUIChanged()
-  {   
+  {
     associated_data.changed = true;
     data.changed = true;
   }
 
-  public void controlEvent(ControlEvent theEvent) {  
-    
+  public void controlEvent(ControlEvent theEvent) {
+
     String tab_name = "";
     if (theEvent.isController())
     {
       Controller controller = theEvent.getController();
       tab_name = controller.getTab().getName();
-    }
-    else if (theEvent.isGroup())
+    } else if (theEvent.isGroup())
     {
       // used for radio only
-  
-       ControllerGroup group = theEvent.getGroup();  
-       tab_name = group.getTab().getName();
-       
-       if (!tab_name.equals(pageName))
-         return;
 
-       String class_name = group.getClass().getSimpleName();
+      ControllerGroup group = theEvent.getGroup();
+      tab_name = group.getTab().getName();
 
-       boolean is_radio = class_name.equals("RadioButton");
+      if (!tab_name.equals(pageName))
+        return;
 
-       if (is_radio) 
-       {
-          // small fix to setup int_value from radio
-          int int_value = int(group.getValue());
-          String name = group.getName();
-          associated_data.setInt(name, int_value);
-       }  
+      String class_name = group.getClass().getSimpleName();
+
+      boolean is_radio = class_name.equals("RadioButton");
+
+      if (is_radio)
+      {
+        // small fix to setup int_value from radio
+        int int_value = int(group.getValue());
+        String name = group.getName();
+        associated_data.setInt(name, int_value);
+      }
     }
-    
+
     if (tab_name == pageName)
-        onUIChanged();
+      onUIChanged();
   }
 
   Textlabel inlineLabel(String content, int width)
@@ -200,9 +194,9 @@ class GUIPanel implements ControlListener
       .setSize(width, heightCtrl)
       .setColorValue(LabelsHandler.label_color)
       .moveTo(pageName);
-      
+
     LabelsHandler.labels.add(l);
-  
+
     xPos += width;
     indexControler++;
 
@@ -228,14 +222,14 @@ class GUIPanel implements ControlListener
     return l;
   }
 
-  Slider addIntSlider(String field, String label, int min, int max, boolean horizontal)
+  Slider addIntSlider(String field, String label, int min, int max)
   {
-    return addIntSlider(field, label, associated_data, min, max, horizontal);
+    return addIntSlider(field, label, associated_data, min, max);
   }
 
-  Slider addIntSlider(String field, String label, Object the_data, int min, int max, boolean horizontal)
+  Slider addIntSlider(String field, String label, Object the_data, int min, int max)
   {
-    Slider s = addSlider( field, label, the_data, min, max, horizontal);
+    Slider s = addSlider( field, label, the_data, min, max);
     int nbTicks = (int) (max - min + 1);
     s.setNumberOfTickMarks(nbTicks);
     s.showTickMarks(false);
@@ -244,12 +238,46 @@ class GUIPanel implements ControlListener
     return s;
   }
 
-  Slider addSlider(String field, String label, float min, float max, boolean horizontal)
+  Slider addSlider(String field, String label, float min, float max)
   {
-    return addSlider(field, label, associated_data, min, max, horizontal);
+    return addSlider(field, label, associated_data, min, max);
   }
 
-  Slider addSlider(String field, String label, Object the_data, float min, float max, boolean horizontal)
+  int getWidthLabel(String label)
+  {
+
+    int width = 0;
+    for (char c : label.toCharArray()) {
+
+      switch (c)
+      {
+      case 'I':
+      case 'i':
+        width +=2;
+        break;
+
+      case 'T':
+      case 't':
+        width += 4;
+        break;
+      case '.':
+      case ',':
+      case ';':
+        width += 4;
+        break;
+      case '-':
+        width += 3;
+        break;
+      default:
+        width +=5;
+        break;
+      }
+    }
+
+    return width;
+  }
+
+  Slider addSlider(String field, String label, Object the_data, float min, float max)
   {
     Slider s = cp5.addSlider(the_data, field)
       .setLabel(label)
@@ -258,23 +286,18 @@ class GUIPanel implements ControlListener
       .setRange(min, max)
       .moveTo(pageName);
 
-    if (horizontal)
-    {
-      xPos += xspace + widthCtrl;
-    } else
-    {
-      yPos+=heightCtrl+2;
-      xPos = StartX;
-    }
+    xPos += xspace + widthCtrl;
 
     controlP5.Label l = s.getCaptionLabel();
     l.getStyle().marginTop = 0; //move upwards (relative to button size)
-    l.getStyle().marginLeft = -65; //move to the right
+
+    s.getCaptionLabel().getStyle().marginLeft = -getWidthLabel(label) - 8; // adjust -10 as needed
+
 
     return s;
   }
-  
-  Toggle addToggle(String name, String label,  boolean inline)
+
+  Toggle addToggle(String name, String label)
   {
     Toggle t = cp5.addToggle(associated_data, name)
       .setLabel(label)
@@ -288,14 +311,8 @@ class GUIPanel implements ControlListener
     controlerColor.setActive( controlerColor.getBackground());
     controlerColor.setBackground(tmp);
 
-    if (inline)
-    {
-        xPos+=100+5;
-    }
-    else
-    {
-      nextLine();
-    }
+
+    xPos+=100+5;
 
     //t.setLabel("The Toggle Name");
     controlP5.Label l = t.getCaptionLabel();
@@ -330,15 +347,15 @@ class GUIPanel implements ControlListener
   }
 
   Button addButton(String name)
-  { 
+  {
     int width_bt = 100;
-    
+
     Button bt = cp5.addButton(name + indexControler)
       .setPosition(xPos, yPos)
       .setLabel(name)
       .setSize(width_bt, heightCtrl)
       .moveTo(pageName);
-      
+
     xPos += width_bt+5;
 
     indexControler++;
@@ -348,31 +365,31 @@ class GUIPanel implements ControlListener
   RadioButton addRadio(String name, ArrayList<String> labels )
   {
     int width_bt = 100;
-    
+
     RadioButton r1 = cp5.addRadioButton(associated_data, name)
-         .setPosition(xPos, yPos)
-         .setSize(width_bt, heightCtrl)
-         .setItemsPerRow(labels.size())
-         .setSpacingColumn(10)
-         .moveTo(pageName);
-         
-  
-    for (int i = 0 ; i < labels.size(); i++)
+      .setPosition(xPos, yPos)
+      .setSize(width_bt, heightCtrl)
+      .setItemsPerRow(labels.size())
+      .setSpacingColumn(10)
+      .moveTo(pageName);
+
+
+    for (int i = 0; i < labels.size(); i++)
     {
       String _label = labels.get(i);
       r1.addItem(_label, float(i));
     }
-     
-    for(Toggle t:r1.getItems()) {
-       t.getCaptionLabel().setColorBackground(color(125,0));
-       
-       t.getCaptionLabel().getStyle().moveMargin(-8,0,0,-width_bt);   
-       t.getCaptionLabel().getStyle().movePadding(7,0,0,3);
-       t.getCaptionLabel().getStyle().backgroundWidth = 500;
-       t.getCaptionLabel().getStyle().backgroundHeight = 20;
-     }
-    
-    nextLine();   
+
+    for (Toggle t : r1.getItems()) {
+      t.getCaptionLabel().setColorBackground(color(125, 0));
+
+      t.getCaptionLabel().getStyle().moveMargin(-8, 0, 0, -width_bt);
+      t.getCaptionLabel().getStyle().movePadding(7, 0, 0, 3);
+      t.getCaptionLabel().getStyle().backgroundWidth = 500;
+      t.getCaptionLabel().getStyle().backgroundHeight = 20;
+    }
+
+    nextLine();
     return r1;
   }
 
@@ -381,16 +398,15 @@ class GUIPanel implements ControlListener
     xPos = 20;
     yPos = 20;
   }
-  
+
   void nextLine()
   {
     xPos = 20;
     yPos += heightCtrl + 1;
   }
-  
+
   void space()
   {
     yPos += 5;
   }
-  
 }

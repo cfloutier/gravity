@@ -18,7 +18,8 @@ class GravityData extends DataGlobal
     void reset()
     {
       particles.CopyFrom(new DataParticles());
-      planets.CopyFrom(new DataPlanets());
+      // as planets  
+      planets.reset();
       style.CopyFrom(new Style());
     }
     
