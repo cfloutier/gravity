@@ -49,7 +49,7 @@ class Particle {
 
         line.add(position);
     }
-
+  
     PVector computeForce()
     {
         PVector force = new PVector(0,0);
@@ -67,13 +67,12 @@ class Particle {
               return new PVector(0,0);
             }
 
-            if (distance < planet.size)
+            if (distance < planet.size/2)
             {
-              force.add( -speed.x/(1+planet.drag), -speed.y/(1+planet.drag) );
+              force.add( -speed.x*0.001*planet.drag, -speed.y*0.001*planet.drag );
               
             }
             
-
             delta.normalize();
 
 

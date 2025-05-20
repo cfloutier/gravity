@@ -11,7 +11,9 @@ class DataPlanets extends DataList
 
   void reset()
   {
+    super.reset();
     
+    edit_planet.CopyFrom(new DataPlanet());
   }
   
   DataPlanet newItem()
@@ -27,7 +29,7 @@ class DataPlanets extends DataList
   void draw()
   {
     strokeWeight(1);   
-    color gray = #A0A0A0; //<>// //<>//
+    color gray = #A0A0A0;  //<>//
     
     color red =#ff3300;
     color green = #1bfa1f;
@@ -75,7 +77,6 @@ class DataPlanet extends GenericData
   }
 }
 
-
 class PlanetsGui extends GUIListPanel
 {
   DataPlanets pdata = null;
@@ -102,6 +103,7 @@ class PlanetsGui extends GUIListPanel
     super.Init();
 
     addListBar();
+
     current_Planet = addLabel("current Planet : ??");
  
     center_button = addButton("Center").plugTo(this, "center");
@@ -113,7 +115,7 @@ class PlanetsGui extends GUIListPanel
 
     size  = addSlider("size", "Size", pdata.edit_planet, 0, 1000);
     gravity = addSlider("gravity", "Gravity", pdata.edit_planet, -pdata.max_gravity, pdata.max_gravity);
-    drag = addSlider("drag", "Drag", pdata.edit_planet, 0, 10);
+    drag = addSlider("drag", "Drag", pdata.edit_planet, 0, 100);
   }
 
   void updateCurrentItem()
@@ -126,7 +128,9 @@ class PlanetsGui extends GUIListPanel
       size.hide();
       gravity.hide();
       drag.hide();
+
       current_Planet.setText("No Planet");
+
       return;
     }
 
@@ -144,8 +148,8 @@ class PlanetsGui extends GUIListPanel
       DataPlanet planet = pdata.planet(pdata.current_index);
       pdata.edit_planet.CopyFrom(planet);
       
-      println("edit_planet changed");
-      println("edit_planet.size " + pdata.edit_planet.size); 
+      // println("edit_planet changed");
+      // println("edit_planet.size " + pdata.edit_planet.size); 
 
       center_x.setValue(planet.center_x);
       center_y.setValue(planet.center_y);
@@ -226,7 +230,7 @@ class PlanetsGui extends GUIListPanel
     // called if drag has started on each mouse move
     PVector delta =  PVector.sub(last_mouse_pos, pos);
     
-    print(delta);
+   // print(delta);
     
     DataPlanet planet = (DataPlanet) pdata.items.get(pdata.current_index);
     

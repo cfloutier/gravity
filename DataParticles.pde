@@ -18,7 +18,6 @@ class DataParticles extends GenericData
   float min_speed = 1;
   float max_speed = 2;
   
-
   float min_distance_to_planets = 5;
   float max_distance_to_page = 2000;
   
@@ -76,11 +75,11 @@ class ParticlesGUI extends GUIPanel
     max_speed = addSlider("max_speed", "Spawn Max Speed", -2, 2);
     
     space();
-    
+    nextLine();
     min_distance_to_planets = addSlider("min_distance_to_planets", "Min Distance to Planets", 5, 100);
     
     nextLine();
-    space();
+ space();
     
     max_distance_to_page = addSlider("max_distance_to_page", "Max Distance Page", 0, 3000);
   }

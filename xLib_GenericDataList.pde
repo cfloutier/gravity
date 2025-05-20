@@ -19,6 +19,12 @@ class DataList extends GenericData
   {
     return items.size();
   }
+  
+  void reset()
+  {
+    items.clear();
+    current_index = 0;
+  }
 
   // must be overriden by real implementation
   GenericData newItem()
