@@ -1,6 +1,5 @@
 class DataPlanets extends DataList
 {
-  
   float max_gravity = 500;
   
   DataPlanet edit_planet = new DataPlanet();
@@ -38,8 +37,6 @@ class DataPlanets extends DataList
     {
       DataPlanet planet = planet(i);
       
-      stroke(data.style.lineColor.col);
-      
       if (current_index == i)
       {
         float ratio = inverseLerp(-max_gravity, max_gravity, planet.gravity);
@@ -66,7 +63,6 @@ class DataPlanet extends GenericData
     DataPlanet() {
     super("Planet");
   }
-  
   
   float drawSize()
   {

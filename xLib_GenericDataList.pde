@@ -1,7 +1,5 @@
 // a set of tools used to manages list (planets, particles and so on) //<>// //<>//
 
-
-
 class DataList extends GenericData
 {
   int current_index = 0;
@@ -54,7 +52,7 @@ class DataList extends GenericData
     for (int i = 0; i < nb_items; i++)
     {
       GenericData item = items.get(i);
-      json.setJSONObject("planet_"+i, item.SaveJson());
+      json.setJSONObject(sub_chapter_name + "_"+i, item.SaveJson());
     }
 
     json.setInt("current_index", current_index);
