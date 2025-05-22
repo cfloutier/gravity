@@ -1,3 +1,32 @@
+
+
+class DataSpawner extends GenericData
+{
+  int nb_particles = 100;
+  float center_x = 0;
+  float center_y = 0;
+  
+  float size = 10;
+  
+
+  float direction = 0;
+  float range_direction = 30;
+  float min_speed = 1;
+  float max_speed = 10;
+
+  DataSpawner() {
+    super("Spawner");
+  }
+
+  float drawSize()
+  {
+    if (size < 20)
+      return 20;
+
+    return size;
+  }
+}
+
 class DataSpawners extends DataList
 {
   DataSpawner edit_spawner = new DataSpawner();
@@ -40,54 +69,39 @@ class DataSpawners extends DataList
       } else
         stroke(gray);
 
-      circle(spawner.center_x, spawner.center_y, spawner.drawSize());
+      circle(spawner.center_x, spawner.center_y, spawner.drawSize()*2);
       
       strokeWeight(3);
       
-      PVector dir_vector = new PVector(cos(radians(spawner.direction)), sin(radians(spawner.direction)));
-      
+      PVector dir_vector_1 = new PVector(cos(radians(spawner.direction-spawner.range_direction)), sin(radians(spawner.direction-spawner.range_direction)));
+      PVector dir_vector_2 = new PVector(cos(radians(spawner.direction+spawner.range_direction)), sin(radians(spawner.direction+spawner.range_direction)));
+       
       line(spawner.center_x, spawner.center_y, 
-          spawner.center_x + dir_vector.x*spawner.min_speed,  
-          spawner.center_y + dir_vector.y*spawner.min_speed
+          spawner.center_x + dir_vector_1.x*spawner.min_speed*100,  
+          spawner.center_y + dir_vector_1.y*spawner.min_speed*100
           );
           
+     line(spawner.center_x, spawner.center_y, 
+          spawner.center_x + dir_vector_2.x*spawner.min_speed*100,   
+          spawner.center_y + dir_vector_2.y*spawner.min_speed*100
+          );
+        
           
       strokeWeight(1);
       
       line(spawner.center_x, spawner.center_y, 
-          spawner.center_x + dir_vector.x*spawner.max_speed,  
-          spawner.center_y + dir_vector.y*spawner.max_speed
+          spawner.center_x + dir_vector_1.x*spawner.max_speed*100,  
+          spawner.center_y + dir_vector_1.y*spawner.max_speed*100
           );
-      
-      
-      
+          
+     line(spawner.center_x, spawner.center_y, 
+          spawner.center_x + dir_vector_2.x*spawner.max_speed*100,  
+          spawner.center_y + dir_vector_2.y*spawner.max_speed*100
+          ); 
     }
   }
 }
 
-class DataSpawner extends GenericData
-{
-  float center_x = 0;
-  float center_y = 0;
-
-  float size = 10;
-  float direction = 0;
-  float range_direction = 30;
-  float min_speed = 1;
-  float max_speed = 10;
-
-  DataSpawner() {
-    super("Spawner");
-  }
-
-  float drawSize()
-  {
-    if (size < 20)
-      return 20;
-
-    return size;
-  }
-}
 
 class SpawnersGui extends GUIListPanel
 {
@@ -103,9 +117,13 @@ class SpawnersGui extends GUIListPanel
   Textlabel current_Spawner;
 
   Button center_button;
-
+  
+  Slider nb_particles;
+  
   Slider center_x;
   Slider center_y;
+  
+  
 
   Slider size;
   Slider direction;
@@ -120,7 +138,10 @@ class SpawnersGui extends GUIListPanel
     addListBar();
 
     current_Spawner = addLabel("current Spawner : ??");
-
+    
+    nb_particles = addSlider("nb_particles", "Nb particles", sdata.edit_spawner, 0, 200);
+    
+    nextLine();
     center_button = addButton("Center").plugTo(this, "center");
     center_x = addSlider("center_x", "X", sdata.edit_spawner, -2000, 2000);
     center_y  = addSlider("center_y", "Y", sdata.edit_spawner, -2000, 2000);
@@ -137,8 +158,8 @@ class SpawnersGui extends GUIListPanel
 
     nextLine();
 
-    min_speed  = addSlider("min_speed", "Min Speed", sdata.edit_spawner, 0, 180);
-    max_speed  = addSlider("max_speed", "Max Speed", sdata.edit_spawner, 0, 180);
+    min_speed  = addSlider("min_speed", "Min Speed", sdata.edit_spawner, 0, 10);
+    max_speed  = addSlider("max_speed", "Max Speed", sdata.edit_spawner, 0, 10);
 
   }
 
@@ -146,6 +167,7 @@ class SpawnersGui extends GUIListPanel
   {
     if (sdata.size() == 0)
     {
+      nb_particles.hide();
       center_button.hide();
       center_x.hide();
       center_y.hide();
@@ -161,6 +183,7 @@ class SpawnersGui extends GUIListPanel
     }
 
 
+    nb_particles.show();
     center_button.show();
     center_x.show();
     center_y.show();
@@ -177,6 +200,7 @@ class SpawnersGui extends GUIListPanel
       DataSpawner spawner = sdata.spawner(sdata.current_index);
       sdata.edit_spawner.CopyFrom(spawner);
 
+      nb_particles.setValue(spawner.nb_particles);
       center_x.setValue(spawner.center_x);
       center_y.setValue(spawner.center_y);
       size.setValue(spawner.size);

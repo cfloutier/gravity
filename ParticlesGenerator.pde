@@ -31,20 +31,29 @@ class Particle {
     boolean stopped = false;
 
     Line line = new Line();
-    GravityData data = null;
+    GravityData data;
+    DataSpawner spawner;
+   
     
-    Particle(GravityData data)
+    Particle(GravityData data, DataSpawner spawner)
     {
         this.data = data;
-        float radius = random(data.particles.min_radius, data.particles.max_radius);
+        
+        
+        
+        float radius = random(spawner.size);
         float direction = random(PI*2);
-
-        float speed_direction = random(PI*2);
-        float speed_v = random(data.particles.min_speed, data.particles.max_speed);
+        
+        float speed_direction = radians(spawner.direction + random(-spawner.range_direction, spawner.range_direction));
+       
+        float speed_v = random(spawner.min_speed, spawner.max_speed);
         
         //println("radius " + radius);
 
-        position = new PVector(radius* cos(direction), radius*sin(direction) );
+        position = new PVector(spawner.center_x + radius* cos(direction), spawner.center_y + radius*sin(direction) );
+        
+        
+        
         speed = new PVector(speed_v* cos(speed_direction), speed_v*sin(speed_direction) );
 
         line.add(position);
@@ -139,9 +148,14 @@ class ParticlesGenerator {
     
     randomSeed(0);
     
-    for (int i = 0 ; i < data.particles.nb_particles; i++)
+    for (int i = 0 ; i < data.spawners.size(); i++)
     {
-        particles.add( new Particle(data) );  
+      DataSpawner spawner = data.spawners.spawner(i);
+      
+      for (int j = 0 ; j < spawner.nb_particles; j++)
+      {
+          particles.add( new Particle(data, spawner) );  
+      }
     }
     
     for (int i = 0 ; i < data.particles.steps; i++)
