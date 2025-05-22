@@ -9,7 +9,7 @@ class DataCanvas extends GenericData
     
   int steps = 1000;
 
-  float min_distance_to_planets = 5;
+ 
   float max_distance_to_page = 2000;
   
   public void LoadJson(JSONObject json) {
@@ -30,7 +30,7 @@ class CanvasGUI extends GUIPanel
   Slider steps;
   Slider steps_size;
  
-  Slider min_distance_to_planets;
+  
   Slider max_distance_to_page;
   
   void setupControls()
@@ -44,10 +44,7 @@ class CanvasGUI extends GUIPanel
     steps_size = addSlider("steps_size", "steps size", 0.1, 100);
     
    
-    space();
-    nextLine();
     
-    min_distance_to_planets = addSlider("min_distance_to_planets", "Min Distance to Planets", 5, 100);
     
     nextLine();
  space();
@@ -66,7 +63,7 @@ class CanvasGUI extends GUIPanel
     steps.setValue(data.steps);
     steps_size.setValue(data.steps_size);
     
-    min_distance_to_planets.setValue(data.min_distance_to_planets);
+
     max_distance_to_page.setValue(data.max_distance_to_page);
   }
 }

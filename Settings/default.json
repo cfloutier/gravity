@@ -1,42 +1,27 @@
 {
   "Planets": {
     "planet_0": {
-      "radius": 10,
       "gravity": 100,
       "drag": 1,
+      "radius": 10,
       "center_y": -71.0009765625,
       "center_x": -254
     },
     "planet_1": {
-      "radius": 10,
-      "gravity": 123.33331298828125,
+      "gravity": 246.66668701171875,
       "drag": 1,
-      "center_y": -166.666015625,
-      "center_x": 273.3330078125
+      "radius": 70,
+      "center_y": 95.333984375,
+      "center_x": 209.666748046875
     },
-    "planet_2": {
-      "radius": 60.000003814697266,
-      "gravity": 500,
-      "drag": 10,
-      "center_y": 309.03271484375,
-      "center_x": 193.20703125
-    },
-    "planet_3": {
-      "radius": 176.6666717529297,
-      "gravity": 0,
-      "drag": 2.366666793823242,
-      "center_y": 0,
-      "center_x": 0
-    },
-    "planet_4": {
-      "radius": 10,
-      "gravity": 100,
-      "drag": 1,
-      "center_y": 192,
-      "center_x": -220.9998779296875
-    },
-    "nb_items": 5,
-    "current_index": 3
+    "nb_items": 2,
+    "current_index": 1
+  },
+  "Canvas": {
+    "steps_size": 1.0989999771118164,
+    "max_distance_to_page": 2000,
+    "min_distance_to_planets": 5,
+    "steps": 3499
   },
   "Style": {
     "backgroundColor": -16118253,
@@ -45,36 +30,16 @@
   },
   "Spwaners": {
     "spawner_0": {
+      "nb_particles": 23,
+      "max_speed": 0,
+      "min_speed": 0,
       "radius": 10,
-      "max_speed": 10,
-      "min_speed": 1,
-      "range_direction": 30,
-      "center_y": 20,
-      "center_x": -52,
+      "range_direction": 180,
+      "center_y": 197,
+      "center_x": -208.000244140625,
       "direction": 0
     },
-    "spawner_1": {
-      "radius": 10,
-      "max_speed": 97.80000305175781,
-      "min_speed": 31.80000114440918,
-      "range_direction": 22.200000762939453,
-      "center_y": -2,
-      "center_x": 151,
-      "direction": -55.20000457763672
-    },
-    "nb_items": 2,
+    "nb_items": 1,
     "current_index": 0
-  },
-  "Canvas": {
-    "nb_particles": 144,
-    "max_radius": 410,
-    "steps_size": 6.760000228881836,
-    "max_distance_to_page": 740,
-    "min_radius": 180,
-    "min_distance_to_planets": 23.049999237060547,
-    "max_speed": 1.3066668510437012,
-    "draw": true,
-    "min_speed": 0.38666677474975586,
-    "steps": 3400
   }
 }

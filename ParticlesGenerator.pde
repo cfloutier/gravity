@@ -68,7 +68,7 @@ class Particle {
             float distance_2 = delta.magSq();
             float distance = sqrt(distance_2);
 
-            if (distance < data.particles.min_distance_to_planets)
+            if (distance < planet.min_distance_to_planets)
             {
               stopped = true;
               return new PVector(0,0);

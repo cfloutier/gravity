@@ -5,6 +5,8 @@ class DataPlanet extends GenericData
   float center_y = 0;
 
   float radius = 10;
+  float min_distance_to_planets = 5;
+
   float gravity = 100;
   float drag = 1;
 
@@ -100,6 +102,7 @@ class PlanetsGui extends GUIListPanel
   Slider center_x;
   Slider center_y;
   Slider radius;
+  Slider min_distance_to_planets;
   Slider gravity;
   Slider drag;
   
@@ -119,6 +122,11 @@ class PlanetsGui extends GUIListPanel
     space();
 
     radius  = addSlider("radius", "Radius", pdata.edit_planet, 0, 1000);
+    min_distance_to_planets = addSlider("min_distance_to_planets", "Min particle distance", 5, 100);
+
+    space();
+    nextLine();
+    
     gravity = addSlider("gravity", "Gravity", pdata.edit_planet, -pdata.max_gravity, pdata.max_gravity);
     drag = addSlider("drag", "Drag", pdata.edit_planet, 0, 100);
   }
@@ -161,6 +169,7 @@ class PlanetsGui extends GUIListPanel
       radius.setValue(planet.radius);
       gravity.setValue(planet.gravity);
       drag.setValue(planet.drag);
+      min_distance_to_planets.setValue(planet.min_distance_to_planets);
 
       current_Planet.setText("Planet " + (pdata.current_index + 1) + " / " + pdata.count());
     }
