@@ -13,7 +13,7 @@ class DataList extends GenericData
     this.sub_chapter_name = sub_chapter_name;
   }
 
-  int size()
+  int count()
   {
     return items.size();
   }
@@ -90,14 +90,14 @@ class GUIListPanel extends GUIPanel
 
   void prev()
   {
-    if (data_list.size() == 0)
+    if (data_list.count() == 0)
     {
       data_list.current_index = 0;
     } else
     {
       data_list.current_index = data_list.current_index -1;
       if (data_list.current_index < 0)
-        data_list.current_index = data_list.size() -1;
+        data_list.current_index = data_list.count() -1;
     }
 
     updateCurrentItem();
@@ -105,13 +105,13 @@ class GUIListPanel extends GUIPanel
 
   void next()
   {
-    if (data_list.size() == 0)
+    if (data_list.count() == 0)
     {
       data_list.current_index = 0;
     } else
     {
       data_list.current_index = data_list.current_index + 1;
-      if (data_list.current_index >= data_list.size())
+      if (data_list.current_index >= data_list.count())
         data_list.current_index = 0;
     }
 
@@ -120,8 +120,8 @@ class GUIListPanel extends GUIPanel
 
   void fix_index()
   {
-    if (data_list.current_index >= data_list.size())
-      data_list.current_index = data_list.size() -1;
+    if (data_list.current_index >= data_list.count())
+      data_list.current_index = data_list.count() -1;
 
     else if (data_list.current_index < 0)
       data_list.current_index = 0;
@@ -137,7 +137,7 @@ class GUIListPanel extends GUIPanel
 
   void remove()
   {
-    if (data_list.size() == 0)
+    if (data_list.count() == 0)
       return;
 
     fix_index();

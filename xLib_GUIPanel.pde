@@ -87,6 +87,8 @@ class MainPanel
       return;
 
     println("mouse pressed " + mouseX);
+
+
     for (GUIPanel panel : panels)
     {
       if (!panel.tab.isActive())
@@ -98,6 +100,22 @@ class MainPanel
         return;
       }
     }
+
+    // if not check the non active panel
+
+     for (GUIPanel panel : panels)
+    {
+      if (panel.tab.isActive())
+        continue;
+
+      if (panel.mousePressed())
+      {
+        dragging_panel = panel;
+        cp5.getTab(dragging_panel.Name).bringToFront();
+        return;
+      }
+    }
+
 
   }
 

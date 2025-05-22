@@ -6,7 +6,7 @@ class DataSpawner extends GenericData
   float center_x = 0;
   float center_y = 0;
   
-  float size = 10;
+  float radius = 10;
   
 
   float direction = 0;
@@ -18,9 +18,9 @@ class DataSpawner extends GenericData
     super("Spawner");
   }
 
-  float drawSize()
+  float drawRadius()
   {
-    if (size < 20)
+    if (radius < 20)
       return 20;
 
     return size;
@@ -52,24 +52,30 @@ class DataSpawners extends DataList
     return (DataSpawner) items.get(index);
   }
 
-  void draw()
+  void draw(bool active)
   {
     strokeWeight(1);
 
-    color gray = #A0A0A0;
+    color darkblue =#002a69;
     color green = #1bfa1f;
 
-    for (int i = 0; i < size(); i++)
+    for (int i = 0; i < count(); i++)
     {
       DataSpawner spawner = spawner(i);
 
-      if (current_index == i)
+      if (active)
       {
-        stroke(green);
-      } else
-        stroke(gray);
+        if (current_index == i)
+        {
+          stroke(green);
+        } else
+          stroke(darkblue);
 
-      circle(spawner.center_x, spawner.center_y, spawner.drawSize()*2);
+      }
+      else 
+        stroke(darkblue);
+
+      circle(spawner.center_x, spawner.center_y, spawner.drawRadius()*2);
       
       strokeWeight(3);
       
@@ -149,7 +155,7 @@ class SpawnersGui extends GUIListPanel
     nextLine();
     space();
 
-    size  = addSlider("size", "Size", sdata.edit_spawner, 0, 1000);
+    radius  = addSlider("radius", "Radius", sdata.edit_spawner, 0, 1000);
     
     nextLine();
     
@@ -165,7 +171,7 @@ class SpawnersGui extends GUIListPanel
 
   void updateCurrentItem()
   {
-    if (sdata.size() == 0)
+    if (sdata.count() == 0)
     {
       nb_particles.hide();
       center_button.hide();
@@ -209,7 +215,7 @@ class SpawnersGui extends GUIListPanel
       min_speed.setValue(spawner.min_speed);
       max_speed.setValue(spawner.max_speed);
 
-      current_Spawner.setText("Spawner " + (sdata.current_index + 1) + " / " + sdata.size());
+      current_Spawner.setText("Spawner " + (sdata.current_index + 1) + " / " + sdata.count());
     }
     else
     {
@@ -262,7 +268,7 @@ class SpawnersGui extends GUIListPanel
       DataSpawner spawner = (DataSpawner) item;
       PVector spawner_pos = new PVector(spawner.center_x, spawner.center_y );
       float dist = PVector.dist(spawner_pos, pos);
-      if (dist < spawner.drawSize())
+      if (dist < spawner.drawRadius())
       {
         last_mouse_pos = pos;
         sdata.current_index = index;

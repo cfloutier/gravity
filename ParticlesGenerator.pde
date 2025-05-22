@@ -76,7 +76,7 @@ class Particle {
               return new PVector(0,0);
             }
 
-            if (distance < planet.size/2)
+            if (distance < planet.radius/2)
             {
               force.add( -speed.x*0.001*planet.drag, -speed.y*0.001*planet.drag );
               
@@ -148,7 +148,7 @@ class ParticlesGenerator {
     
     randomSeed(0);
     
-    for (int i = 0 ; i < data.spawners.size(); i++)
+    for (int i = 0 ; i < data.spawners.count(); i++)
     {
       DataSpawner spawner = data.spawners.spawner(i);
       

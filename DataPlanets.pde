@@ -1,3 +1,27 @@
+
+class DataPlanet extends GenericData
+{
+  float center_x = 0;
+  float center_y = 0;
+
+  float radius = 10;
+  float gravity = 100;
+  float drag = 1;
+
+    DataPlanet() {
+    super("Planet");
+  }
+  
+  float drawRadius()
+  {
+    if (radius < 20)
+       return 20;
+       
+    return radius;
+  }
+}
+
+
 class DataPlanets extends DataList
 {
   float max_gravity = 500;
@@ -25,51 +49,38 @@ class DataPlanets extends DataList
     return (DataPlanet) items.get(index);
   }
 
-  void draw()
+  void draw(bool active)
   {
     strokeWeight(1);   
     color gray = #A0A0A0;  //<>//
     
     color red =#ff3300;
     color green = #1bfa1f;
+
+    color darkCyan =#009499;  //<>//
       
-    for (int i = 0 ; i < size() ; i++)
+    for (int i = 0 ; i < count() ; i++)
     {
       DataPlanet planet = planet(i);
-      
-      if (current_index == i)
+
+      if (active)
       {
-        float ratio = inverseLerp(-max_gravity, max_gravity, planet.gravity);
-        color c = lerpColor(red, green, ratio);
-        stroke(c);
+         if (current_index == i)
+        {
+          float ratio = inverseLerp(-max_gravity, max_gravity, planet.gravity);
+          color c = lerpColor(red, green, ratio);
+          stroke(c);
+        }
+        else
+          stroke(darkCyan);
       }
       else
-        stroke(gray);
+        stroke(darkCyan);
+     
 
-      circle(planet.center_x, planet.center_y, planet.drawSize());
+
+      circle(planet.center_x, planet.center_y, planet.drawRadius()*2);
     }
-  }
-}
-
-class DataPlanet extends GenericData
-{
-  float center_x = 0;
-  float center_y = 0;
-
-  float size = 10;
-  float gravity = 100;
-  float drag = 1;
-
-    DataPlanet() {
-    super("Planet");
-  }
-  
-  float drawSize()
-  {
-    if (size < 20)
-       return 20;
-       
-    return size;
   }
 }
 
@@ -90,7 +101,7 @@ class PlanetsGui extends GUIListPanel
 
   Slider center_x;
   Slider center_y;
-  Slider size;
+  Slider radius;
   Slider gravity;
   Slider drag;
   
@@ -109,19 +120,19 @@ class PlanetsGui extends GUIListPanel
     nextLine();
     space();
 
-    size  = addSlider("size", "Size", pdata.edit_planet, 0, 1000);
+    radius  = addSlider("radius", "Radius", pdata.edit_planet, 0, 1000);
     gravity = addSlider("gravity", "Gravity", pdata.edit_planet, -pdata.max_gravity, pdata.max_gravity);
     drag = addSlider("drag", "Drag", pdata.edit_planet, 0, 100);
   }
 
   void updateCurrentItem()
   {
-    if (pdata.size() == 0)
+    if (pdata.count() == 0)
     {
       center_button.hide();
       center_x.hide();
       center_y.hide();
-      size.hide();
+      radius.hide();
       gravity.hide();
       drag.hide();
 
@@ -133,7 +144,7 @@ class PlanetsGui extends GUIListPanel
     center_button.show();
     center_x.show();
     center_y.show();
-    size.show();
+    radius.show();
     gravity.show(); 
     drag.show();
 
@@ -145,15 +156,15 @@ class PlanetsGui extends GUIListPanel
       pdata.edit_planet.CopyFrom(planet);
       
       // println("edit_planet changed");
-      // println("edit_planet.size " + pdata.edit_planet.size); 
+      // println("edit_planet.radius " + pdata.edit_planet.radius); 
 
       center_x.setValue(planet.center_x);
       center_y.setValue(planet.center_y);
-      size.setValue(planet.size);
+      radius.setValue(planet.radius);
       gravity.setValue(planet.gravity);
       drag.setValue(planet.drag);
 
-      current_Planet.setText("Planet " + (pdata.current_index + 1) + " / " + pdata.size());
+      current_Planet.setText("Planet " + (pdata.current_index + 1) + " / " + pdata.count());
     }
     else
     {
@@ -184,8 +195,7 @@ class PlanetsGui extends GUIListPanel
 
   void draw()
   {
-    if (tab.isActive())
-      pdata.draw();
+    pdata.draw(tab.isActive());
   }
 
   PVector mousePosition()
@@ -206,7 +216,7 @@ class PlanetsGui extends GUIListPanel
       DataPlanet planet = (DataPlanet) item;
       PVector planet_pos = new PVector(planet.center_x, planet.center_y );
       float dist = PVector.dist(planet_pos, pos);
-      if (dist < planet.drawSize())
+      if (dist < planet.drawRadius())
       {
         last_mouse_pos = pos;
         pdata.current_index = index;
