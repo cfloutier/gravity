@@ -1,14 +1,14 @@
 {
   "Planets": {
     "planet_0": {
-      "size": 60.000003814697266,
+      "radius": 60.000003814697266,
       "gravity": 500,
       "drag": 18.83333396911621,
       "center_y": -36.4080810546875,
       "center_x": 79.486328125
     },
     "planet_1": {
-      "size": 176.6666717529297,
+      "radius": 176.6666717529297,
       "gravity": 123.33331298828125,
       "drag": 0,
       "center_y": 40.1446533203125,
@@ -22,7 +22,7 @@
     "lineColor": -1319184,
     "lineWidth": 0.23333333432674408
   },
-  "Particles": {
+  "Canvas": {
     "nb_particles": 21,
     "max_radius": 410,
     "steps_size": 6.760000228881836,

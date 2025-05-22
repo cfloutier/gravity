@@ -23,7 +23,7 @@ class DataSpawner extends GenericData
     if (radius < 20)
       return 20;
 
-    return size;
+    return radius;
   }
 }
 
@@ -52,7 +52,7 @@ class DataSpawners extends DataList
     return (DataSpawner) items.get(index);
   }
 
-  void draw(bool active)
+  void draw(boolean active)
   {
     strokeWeight(1);
 
@@ -119,7 +119,7 @@ class SpawnersGui extends GUIListPanel
     this.sdata = data;
   }
 
-  int last_index = -1;
+  
   Textlabel current_Spawner;
 
   Button center_button;
@@ -129,9 +129,7 @@ class SpawnersGui extends GUIListPanel
   Slider center_x;
   Slider center_y;
   
-  
-
-  Slider size;
+  Slider radius;
   Slider direction;
   Slider range_direction;
   Slider min_speed;
@@ -177,7 +175,7 @@ class SpawnersGui extends GUIListPanel
       center_button.hide();
       center_x.hide();
       center_y.hide();
-      size.hide();
+      radius.hide();
       direction.hide();
       range_direction.hide();
       min_speed.hide();
@@ -193,7 +191,7 @@ class SpawnersGui extends GUIListPanel
     center_button.show();
     center_x.show();
     center_y.show();
-      size.show();
+      radius.show();
       direction.show();
       range_direction.show();
       min_speed.show();
@@ -209,7 +207,7 @@ class SpawnersGui extends GUIListPanel
       nb_particles.setValue(spawner.nb_particles);
       center_x.setValue(spawner.center_x);
       center_y.setValue(spawner.center_y);
-      size.setValue(spawner.size);
+      radius.setValue(spawner.radius);
       direction.setValue(spawner.direction);
       range_direction.setValue(spawner.range_direction);
       min_speed.setValue(spawner.min_speed);
@@ -246,8 +244,8 @@ class SpawnersGui extends GUIListPanel
 
   void draw()
   {
-    if (tab.isActive())
-      sdata.draw();
+
+      sdata.draw(tab.isActive());
   }
 
   PVector mousePosition()

@@ -39,9 +39,7 @@ class Particle {
     {
         this.data = data;
         
-        
-        
-        float radius = random(spawner.size);
+        float radius = random(spawner.radius);
         float direction = random(PI*2);
         
         float speed_direction = radians(spawner.direction + random(-spawner.range_direction, spawner.range_direction));

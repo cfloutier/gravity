@@ -49,15 +49,15 @@ class DataPlanets extends DataList
     return (DataPlanet) items.get(index);
   }
 
-  void draw(bool active)
+  void draw(boolean active)
   {
     strokeWeight(1);   
-    color gray = #A0A0A0;  //<>//
+ //<>//
     
     color red =#ff3300;
     color green = #1bfa1f;
 
-    color darkCyan =#009499;  //<>//
+    color darkCyan =#009499;  //<>// //<>//
       
     for (int i = 0 ; i < count() ; i++)
     {
@@ -93,8 +93,6 @@ class PlanetsGui extends GUIListPanel
     super("Planets", data);
      this.pdata = data;
   }
-
-  int last_index = -1;
 
   Textlabel current_Planet;
   Button center_button;

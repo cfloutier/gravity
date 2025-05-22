@@ -1,35 +1,35 @@
 {
   "Planets": {
     "planet_0": {
-      "size": 10,
+      "radius": 10,
       "gravity": 100,
       "drag": 1,
       "center_y": -71.0009765625,
       "center_x": -254
     },
     "planet_1": {
-      "size": 10,
+      "radius": 10,
       "gravity": 123.33331298828125,
       "drag": 1,
       "center_y": -166.666015625,
       "center_x": 273.3330078125
     },
     "planet_2": {
-      "size": 60.000003814697266,
+      "radius": 60.000003814697266,
       "gravity": 500,
       "drag": 10,
       "center_y": 309.03271484375,
       "center_x": 193.20703125
     },
     "planet_3": {
-      "size": 176.6666717529297,
+      "radius": 176.6666717529297,
       "gravity": 0,
       "drag": 2.366666793823242,
       "center_y": 0,
       "center_x": 0
     },
     "planet_4": {
-      "size": 10,
+      "radius": 10,
       "gravity": 100,
       "drag": 1,
       "center_y": 192,
@@ -45,7 +45,7 @@
   },
   "Spwaners": {
     "spawner_0": {
-      "size": 10,
+      "radius": 10,
       "max_speed": 10,
       "min_speed": 1,
       "range_direction": 30,
@@ -54,7 +54,7 @@
       "direction": 0
     },
     "spawner_1": {
-      "size": 10,
+      "radius": 10,
       "max_speed": 97.80000305175781,
       "min_speed": 31.80000114440918,
       "range_direction": 22.200000762939453,
@@ -65,7 +65,7 @@
     "nb_items": 2,
     "current_index": 0
   },
-  "Particles": {
+  "Canvas": {
     "nb_particles": 144,
     "max_radius": 410,
     "steps_size": 6.760000228881836,

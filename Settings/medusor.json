@@ -4,18 +4,18 @@
       "gravity": 500,
       "drag": 18.83333396911621,
       "radius": 60.000003814697266,
-      "center_y": 7.9417724609375,
-      "center_x": -285.95947265625
+      "center_y": -170.0582275390625,
+      "center_x": -53.95947265625
     },
     "planet_1": {
       "gravity": 123.33331298828125,
       "drag": 1,
       "radius": 10,
-      "center_y": 8.789306640625,
-      "center_x": 116.681396484375
+      "center_y": 290.788818359375,
+      "center_x": -44.318603515625
     },
     "nb_items": 2,
-    "current_index": 1
+    "current_index": 0
   },
   "Canvas": {
     "steps_size": 6.760000228881836,
@@ -30,13 +30,13 @@
   },
   "Spwaners": {
     "spawner_0": {
-      "nb_particles": 100,
+      "nb_particles": 118,
       "max_speed": 1.5999999046325684,
       "min_speed": 1,
       "radius": 10,
       "range_direction": 180,
-      "center_y": 18.0008544921875,
-      "center_x": -27,
+      "center_y": 39.0009765625,
+      "center_x": -45,
       "direction": -180
     },
     "nb_items": 1,

@@ -111,12 +111,10 @@ class MainPanel
       if (panel.mousePressed())
       {
         dragging_panel = panel;
-        cp5.getTab(dragging_panel.Name).bringToFront();
+        cp5.getTab(dragging_panel.pageName).bringToFront();
         return;
       }
     }
-
-
   }
 
   void mouseDragged()

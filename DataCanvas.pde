@@ -1,8 +1,8 @@
 
-class DataParticles extends GenericData
+class DataCanvas extends GenericData
 {
-  DataParticles() {
-    super("Particles");
+  DataCanvas() {
+    super("Canvas");
   }
  //<>//
   float steps_size = 10;
@@ -17,17 +17,16 @@ class DataParticles extends GenericData
   }
 }
 
-class ParticlesGUI extends GUIPanel
+class CanvasGUI extends GUIPanel
 {
-  DataParticles data;
+  DataCanvas data;
 
-  public ParticlesGUI(DataParticles data)
+  public CanvasGUI(DataCanvas data)
   {
-    super("Particles", data);
+    super("Canvas", data);
     this.data = data;
   }
  
-
   Slider steps;
   Slider steps_size;
  
