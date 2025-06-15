@@ -46,9 +46,7 @@ void setup()
     setupControls();
     
     data.LoadSettings("./Settings/default.json");
-    
-    dataGui.setGUIValues();
-    
+    dataGui.setGUIValues();  
     surface.setResizable(true);
 }
 
