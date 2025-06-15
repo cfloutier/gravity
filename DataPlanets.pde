@@ -23,11 +23,10 @@ class DataPlanet extends GenericData
   }
 }
 
-
 class DataPlanets extends DataList
 {
   float max_gravity = 500;
-  
+   //<>//
   DataPlanet edit_planet = new DataPlanet();
 
   DataPlanets() {
@@ -54,12 +53,11 @@ class DataPlanets extends DataList
   void draw(boolean active)
   {
     strokeWeight(1);   
- //<>//
     
     color red =#ff3300;
     color green = #1bfa1f;
 
-    color darkCyan =#009499;  //<>// //<>//
+    color darkCyan =#009499;  
       
     for (int i = 0 ; i < count() ; i++)
     {
@@ -79,8 +77,6 @@ class DataPlanets extends DataList
       else
         stroke(darkCyan);
      
-
-
       circle(planet.center_x, planet.center_y, planet.drawRadius()*2);
     }
   }
@@ -122,7 +118,7 @@ class PlanetsGui extends GUIListPanel
     space();
 
     radius  = addSlider("radius", "Radius", pdata.edit_planet, 0, 1000);
-    min_distance_to_planets = addSlider("min_distance_to_planets", "Min particle distance", 5, 100);
+    min_distance_to_planets = addSlider("min_distance_to_planets", "Min particle distance", pdata.edit_planet, 5, 100);
 
     space();
     nextLine();

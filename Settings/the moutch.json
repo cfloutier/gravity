@@ -1,0 +1,46 @@
+{
+  "Planets": {
+    "planet_0": {
+      "gravity": 246.66668701171875,
+      "min_distance_to_planets": 13.550000190734863,
+      "drag": 0,
+      "radius": 73.33333587646484,
+      "center_y": 0.9990234375,
+      "center_x": -504
+    },
+    "planet_1": {
+      "gravity": 246.66668701171875,
+      "min_distance_to_planets": 11.649999618530273,
+      "drag": 0,
+      "radius": 70,
+      "center_y": 4.333984375,
+      "center_x": 470.666748046875
+    },
+    "nb_items": 2,
+    "current_index": 1
+  },
+  "Canvas": {
+    "steps_size": 1.0989999771118164,
+    "max_distance_to_page": 2000,
+    "steps": 10000
+  },
+  "Style": {
+    "backgroundColor": -16118253,
+    "lineColor": -1319184,
+    "lineWidth": 0.23333333432674408
+  },
+  "Spwaners": {
+    "spawner_0": {
+      "nb_particles": 126,
+      "max_speed": 0.699999988079071,
+      "min_speed": 0.6000000238418579,
+      "radius": 156.6666717529297,
+      "range_direction": 3.000000238418579,
+      "center_y": 154.2412109375,
+      "center_x": -15.001708984375,
+      "direction": -82.79999542236328
+    },
+    "nb_items": 1,
+    "current_index": 0
+  }
+}
