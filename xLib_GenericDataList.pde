@@ -1,11 +1,10 @@
-// a set of tools used to manages list (planets, particles and so on) //<>// //<>// //<>//
+// a set of tools used to manages list (planets, particles and so on) //<>// //<>// //<>// //<>// //<>//
 
 class DataList extends GenericData
 {
   int current_index = 0;
   ArrayList<GenericData> items = new ArrayList<GenericData>();
   String sub_chapter_name = "";
-
 
   DataList(String chapter_name, String sub_chapter_name)
   {
@@ -145,7 +144,7 @@ class GUIListPanel extends GUIPanel
     fix_index();
 
     data_list.items.remove(data_list.current_index);
-    print(data_list.current_index);
+    // print(data_list.current_index);
     data_list.current_index--;
     last_index = -1;
     fix_index();  

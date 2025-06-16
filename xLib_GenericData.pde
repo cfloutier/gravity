@@ -40,7 +40,7 @@ class GenericData
     Field[] fields = this.getClass().getDeclaredFields();
 
     for (Field field : fields) {
-      try { //<>// //<>//
+      try { //<>// //<>// //<>// //<>// //<>//
         field.setAccessible(true); // Allow access to private fields if necessary
         String name = field.getName();
         if (name == "changed" || name =="this$0")
@@ -102,7 +102,7 @@ class GenericData
     return json;
   }
   
-    void CopyFrom(GenericData src)
+  void CopyFrom(GenericData src)
   {
     Field[] fields = this.getClass().getDeclaredFields();
     for (Field field : fields) {
@@ -141,7 +141,7 @@ class DataGlobal
   
   void reset()
   {
-    println("error calling base reset");
+      println("error calling base reset");
   }
 
   void setSize(float width, float height)
@@ -166,7 +166,6 @@ class DataGlobal
     chapters.add(data_chapter);
   }
 
-
   String getFileNameWithoutExtension(String path) {
     File file = new File(path);
     String fileName = file.getName();
@@ -183,8 +182,8 @@ class DataGlobal
     println("loading settings : " + path);
     reset();
     settings_path = path;
- //<>//
-    data.name = getFileNameWithoutExtension(path); //<>//
+
+    data.name = getFileNameWithoutExtension(path);
     JSONObject json = loadJSONObject(path);
 
     for (GenericData chapter : chapters) {
@@ -228,7 +227,7 @@ class DataGlobal
       if (chapter.changed)
         return true;
     }
-
+  
     return false;
   }
 
