@@ -26,7 +26,11 @@ class GenericData
       }
     }
     catch (NoSuchFieldException e) {
-      println("Field '" + name + "' does not exist.");
+      
+      String class_name = this.getClass().getSimpleName();
+      println(class_name + ".'" + name + "' does not exist.");
+     // println("Field '" + name + "' does not exist.");
+      
     }
     catch (IllegalAccessException e) {
       e.printStackTrace(); // Handle exceptions gracefully

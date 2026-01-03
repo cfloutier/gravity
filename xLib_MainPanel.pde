@@ -1,4 +1,4 @@
-
+    
 class MainPanel
 {
   ArrayList<GUIPanel> panels = new ArrayList<GUIPanel>();

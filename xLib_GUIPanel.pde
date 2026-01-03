@@ -18,6 +18,20 @@ static class LabelsHandler
   }
 }
 
+class myRadioButton extends RadioButton
+{
+  public GenericData the_object;
+
+  public myRadioButton(final ControlP5 theControlP5 , final ControllerGroup< ? > theParent , final String theName , final int theX , final int theY ) 
+  {
+    super(theControlP5, theParent, theName, theX, theY  );
+
+  }
+
+
+
+}
+
 class GUIPanel implements ControlListener
 {
   String pageName;
@@ -125,7 +139,7 @@ class GUIPanel implements ControlListener
     } else if (theEvent.isGroup())
     {
       // used for radio only
-
+ //<>//
       ControllerGroup group = theEvent.getGroup();
       tab_name = group.getTab().getName();
 
@@ -134,14 +148,16 @@ class GUIPanel implements ControlListener
 
       String class_name = group.getClass().getSimpleName();
 
-      boolean is_radio = class_name.equals("RadioButton");
+      boolean is_radio = class_name.equals("myRadioButton");
 
       if (is_radio)
       {
+        myRadioButton radio = (myRadioButton) group;
+        
         // small fix to setup int_value from radio
-        int int_value = int(group.getValue());
+        int int_value = int(group.getValue()); //<>//
         String name = group.getName();
-        associated_data.setInt(name, int_value);
+        radio.the_object.setInt(name, int_value);
       }
     }
 
@@ -330,17 +346,27 @@ class GUIPanel implements ControlListener
     return bt;
   }
 
-  RadioButton addRadio(String name, ArrayList<String> labels )
+  myRadioButton addRadio(String name, ArrayList<String> labels)
+  {
+      return addRadio(name, labels, associated_data);
+  }
+
+  myRadioButton addRadio(String name, ArrayList<String> labels, GenericData the_data)
   {
     int width_bt = 100;
 
-    RadioButton r1 = cp5.addRadioButton(associated_data, name)
-      .setPosition(xPos, yPos)
+    // return addRadioButton( the_data , the_data != null ? the_data.toString( ) : "" , name , 0 , 0 );
+    myRadioButton r1 = new myRadioButton( cp5 , ( Tab ) cp5.controlWindow.getTabs( ).get( 1 ) , name , 0 , 0 );
+		cp5.register( the_data , the_data != null ? the_data.toString( ) : ""  , r1 );
+		r1.registerProperty( "arrayValue" );
+		// return myController;
+    r1.the_object = the_data;
+
+    r1.setPosition(xPos, yPos)
       .setSize(width_bt, heightCtrl)
       .setItemsPerRow(labels.size())
       .setSpacingColumn(10)
       .moveTo(pageName);
-
 
     for (int i = 0; i < labels.size(); i++)
     {

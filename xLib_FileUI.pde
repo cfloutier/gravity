@@ -221,8 +221,6 @@ void start_draw()
     strokeWeight(data.style.lineWidth);
     stroke(data.style.lineColor.col);
     
-    println("data.style.lineColor + " + data.style.lineColor);
-    
     current_graphics = g;
 
     data.setSize(width, height);
