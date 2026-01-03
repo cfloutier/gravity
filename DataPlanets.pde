@@ -26,7 +26,7 @@ class DataPlanet extends GenericData
 class DataPlanets extends DataList
 {
   float max_gravity = 500;
-   //<>//
+   
   DataPlanet edit_planet = new DataPlanet();
 
   DataPlanets() {
