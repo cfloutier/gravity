@@ -250,7 +250,7 @@ class SpawnersGui extends GUIListPanel
 
   PVector mousePosition()
   {
-    return new PVector( (mouseX-width/2)/data.global_scale, (mouseY-height/2)/data.global_scale);
+    return new PVector( (mouseX-width/2)/data.page.global_scale, (mouseY-height/2)/data.page.global_scale);
   }
 
   PVector last_mouse_pos;;
