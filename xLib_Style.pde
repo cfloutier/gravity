@@ -1,8 +1,11 @@
+
+
+
+
 class Style extends GenericData
 {
-  Style() { 
+  Style() {
     super("Style");
-
   }
 
   ColorRef lineColor = new ColorRef(color(255, 255, 255), "lineColor");
@@ -47,13 +50,13 @@ class StyleGUI extends GUIPanel
   ColorGroup backgroundColor;
   ColorGroup lineColor;
 
-  void setGUIValues()    
+  void setGUIValues()
   {
     lineWidth.setValue(style.lineWidth);
     lineColor.colorRef = style.lineColor;
-   
+
     backgroundColor.colorRef = style.backgroundColor;
-  }  
+  }
 
   void setupControls()
   {

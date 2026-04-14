@@ -1,171 +1,239 @@
 import java.util.Locale;
 
-void addFileTab()
+class DataPage extends GenericData
 {
-  cp5.addTab("Files");
-  
-  println("addFileTab");
+  float global_scale = 1;
 
-  float xPos = 0;
-  float yPos = 20;
+  boolean clipping = false;
+  float clip_width = 800;
+  float clip_height = 600;
 
-  int widthButton = 100;
-  int heightButton = 20;
+  DataPage() {
+    super("Page");
+  }
+}
 
-  cp5.addButton("LoadJson")
-    .setPosition(xPos, yPos)
-    .setSize(widthButton, heightButton)
-    .moveTo("Files");        
 
-  xPos += widthButton;
+FileGUI file_ui;
 
-  cp5.addButton("SaveJson")
-    .setPosition(xPos, yPos)
-    .setSize(widthButton, heightButton)
-    .moveTo("Files");    
+class FileGUI extends GUIPanel
+{
 
-  yPos += heightButton;
-  xPos = 0;
 
-  cp5.addButton("ExportPDF")
-    .setPosition(xPos, yPos)
-    .setSize(widthButton, heightButton)
-    .moveTo("Files");      
+  DataGlobal global_data;
+  DataPage page_data;
 
-  xPos += widthButton;
+  FileGUI(DataGlobal data)
+  {
+    super("Files", data.page);
+    file_ui  = this;
+    this.global_data = data;
+    this.page_data = data.page;
+  }
 
-  cp5.addButton("ExportSVG")
-    .setPosition(xPos, yPos)
-    .setSize(widthButton, heightButton)
-    .moveTo("Files");
+  void setGUIValues()
+  {
+    println("setGUIValues " + data.name);
+    main_label.setText("Files : " + data.name);
+    scale_slider.setValue(page_data.global_scale -1);
+    clip_toggle.setValue(page_data.clipping);
+    clip_slider_width.setValue(page_data.clip_width);
+    clip_slider_height.setValue(page_data.clip_height);
+  }
 
- // xPos += widthButton;
-  
-  yPos += heightButton+20;
-  xPos = 0;
-  
-  scale_slider = new ScaleSlider(cp5, "");
-  
-  scale_slider.setLabel("Global Scale")
-      .setPosition(xPos, yPos)
-      .setSize(200, heightButton)
+  void update_ui()
+  {
+    if (page_data.clipping)
+    {
+      clip_slider_width.show();
+      clip_slider_height.show();
+    } else
+    {
+      clip_slider_width.hide();
+      clip_slider_height.hide();
+    }
+  }
+
+  Textlabel main_label;
+  ScaleSlider scale_slider;
+
+  Toggle clip_toggle;
+
+  Slider clip_slider_width;
+  Slider clip_slider_height;
+
+  void setupControls()
+  {
+    super.Init();
+
+    main_label = addLabel("Files : ");
+
+    addButton("Load").plugTo(this, "LoadJson");
+    addButton("Save as...").plugTo(this, "SaveJson");
+    addButton("Save").plugTo(this, "Save");
+
+    nextLine();
+
+    addLabel("Export : ");
+
+    addButton("Export PDF").plugTo(this, "ExportPDF");
+    addButton("Export SVG").plugTo(this, "ExportSVG");
+
+    nextLine();
+    addLabel("Page : ");
+    nextLine();
+    scale_slider = new ScaleSlider(cp5, "Scale");
+
+    scale_slider.setPosition(xPos, yPos)
+      .setSize(widthCtrl, heightCtrl)
       .setRange(-9, 9)
       .moveTo("Files")
       .setValue(0)
       .getCaptionLabel().align(ControlP5.LEFT, ControlP5.TOP_OUTSIDE).setPaddingX(0);
-      
- xPos += 210;
-      
-  cp5.addButton("Reset_Scale")
-    .setPosition(xPos, yPos)
-    .setSize(widthButton, heightButton)
-    .moveTo("Files");
-    
-}
 
-ScaleSlider scale_slider;
+    xPos += widthCtrl + 10;
 
-void Reset_Scale()
-{
-  
-  scale_slider.setValue(0);
-}
+    addButton("Reset Scale").plugTo(this, "Reset_Scale");
 
-//subclass slider
-public class ScaleSlider extends Slider{
+    nextLine();
 
+    clip_toggle = addToggle("clipping", "Clip", page_data);
 
-  //constructor
-  public ScaleSlider( ControlP5 cp5 , String name ) {
-    super(cp5,name);
-    
+    clip_slider_width = addSlider("clip_width", "Clip width", 0, 2000);
+    clip_slider_height = addSlider("clip_height", "Clip height", 0, 2000);
   }
-  
-  void computeScale()
+
+  String default_path()
   {
-    float value =  getValue();
-    if (value >= 0)
-    {
-       data.global_scale = 1 + value;
-       getValueLabel().setText(String.format(Locale.US, " x %.1f", 1 + value));
-    }
-    else
-    {
-      data.global_scale = 1 / (1-value);
-      getValueLabel().setText(String.format(Locale.US, " / %.1f", 1 - value));
-    }
-    
-  }
-  
-  
+    if (data.name == "")
+      data.name = "default";
 
-  @Override public Slider setValue( float theValue ) {
-    super.setValue(theValue);
-    computeScale();
-    return this;
+    String default_file = "../Settings/"+data.name+".json";
+    return default_file;
   }
 
-} 
-
-void LoadJson()
-{
-  println("LoadJson ");
-  selectInput("Select data file ", "loadSelected", dataFile("../Settings/default.json")  );
-}
-
-void loadSelected(File selection) 
-{
-  if (selection != null) 
+  void LoadJson()
   {
-    data.LoadSettings(selection.getAbsolutePath());
-    dataGui.setGUIValues();
+    println("LoadJson ");
+    selectInput("Select data file ", "loadSelected", dataFile("../Settings/default.json")  );
+  }
+
+  void SaveJson()
+  {
+    println("SaveJson ");
+
+    selectInput("Save data file ", "saveSelected", dataFile(default_path()));
+  }
+
+  void Save()
+  {
+    if (data.settings_path != "")
+      data.SaveSettings(data.settings_path);
+  }
+
+  void ExportPDF()
+  {
+    _record = true;
+    data.changed = true;
+    mode = 0;
+  }
+
+  void ExportSVG()
+  {
+    _record = true;
+    data.changed = true;
+    mode = 2;
+  }
+
+  void Reset_Scale()
+  {
+    scale_slider.setValue(0);
   }
 }
 
-void SaveJson()
+void saveSelected(File selection)
 {
-  selectInput("Save data file ", "saveSelected", dataFile("../Settings/default.json"));
-}
-
-void saveSelected(File selection) 
-{
-  if (selection == null) 
+  if (selection == null)
   {
-  } else 
+  } else
   {
     String path = selection.getAbsolutePath();
     if (path.length() < 5 || !path.substring(path.length() - 5).equals(".json"))
       path = path + ".json";
 
     data.SaveSettings(path);
-    
+
     String name = selection.getName();
     if (name.endsWith(".json"))
       data.name = name.substring(0, name.length() - 5);
     else
       data.name = name;
+
+    file_ui.setGUIValues();
   }
 }
 
-boolean record = false;
+
+// Slider slider_crop_width;
+// Slider slider_crop_height;
+
+//subclass slider
+public class ScaleSlider extends Slider {
+  //constructor
+  public ScaleSlider( ControlP5 cp5, String name ) {
+    super(cp5, name);
+  }
+
+  void computeScale()
+  {
+    float value =  getValue();
+    if (value >= 0)
+    {
+      data.page.global_scale = 1 + value;
+      getValueLabel().setText(String.format(Locale.US, " x %.1f", 1 + value));
+    } else
+    {
+      data.page.global_scale = 1 / (1-value);
+      getValueLabel().setText(String.format(Locale.US, " / %.1f", 1 - value));
+    }
+  }
+
+  @Override public Slider setValue( float theValue ) {
+    super.setValue(theValue);
+    computeScale();
+    return this;
+  }
+}
+
+void loadSelected(File selection)
+{
+  if (selection != null)
+  {
+    data.LoadSettings(selection.getAbsolutePath());
+    dataGui.setGUIValues();
+  }
+}
+
+boolean _record = false;
 int mode  = 0;
 
-String fileName = "";
+String export_fileName = "";
 void ExportPDF()
 {
-  record = true;
+  _record = true;
+  data.changed = true;
   mode = 0;
 }
 
 void ExportDXF()
 {
-  record = true;
+  _record = true;
   mode = 1;
-}  
+}
 
 void ExportSVG()
 {
-  record = true;
+  _record = true;
   mode = 2;
 }
 
@@ -175,64 +243,68 @@ void start_draw()
 
   if (data.changed)
   {
-    if (data.auto_save)
-      data.save();
 
     data.changed = false;
   }
 
-  if (record) 
+  if (_record)
   {
     String name = data.name;
     if (name == "")
       name = "default";
-      
+
     float sizeMultiplier = 1;
-    
-    println("saving " + name);
-      
-   // sizeMultiplier = (float) width  / 28;
-      
+
+    // sizeMultiplier = (float) width  / 28;
+
     float newWidth = width * sizeMultiplier;
     float newheight = height * sizeMultiplier;
-      
-    fileName = "Export/"+ name + "_" + year() + "-" + month() + "-" + day() + "_" + hour() + "-" + minute() + "-" + second(); 
-    
+
+    export_fileName = "Export/"+ name + "_" + year() + "-" + month() + "-" + day() + "_" + hour() + "-" + minute() + "-" + second();
+
     if (mode == 0)
-       current_graphics = createGraphics((int)newWidth, (int)newheight, PDF, fileName+ ".pdf");       
-    else if (mode == 1)
-      current_graphics = createGraphics((int)newWidth, (int)newheight, DXF, fileName+ ".dxf");       
-    else if (mode ==2)
-      current_graphics = createGraphics((int)newWidth, (int)newheight, SVG, fileName+ ".svg");       
-    
-    data.setSize(newWidth, newheight); 
-    
+    {
+      export_fileName = export_fileName + ".pdf";
+      current_graphics = createGraphics((int)newWidth, (int)newheight, PDF, export_fileName);
+    } else if (mode == 1)
+    {
+      export_fileName = export_fileName + ".dxf";
+      current_graphics = createGraphics((int)newWidth, (int)newheight, DXF, export_fileName);
+    } else if (mode == 2)
+    {
+      export_fileName = export_fileName + ".svg";
+      current_graphics = createGraphics((int)newWidth, (int)newheight, SVG, export_fileName);
+    }
+
+    println("Exported to " + export_fileName);
+
+    data.setSize(newWidth, newheight);
+
     current_graphics.beginDraw();
     current_graphics.strokeWeight(data.style.lineWidth*sizeMultiplier);
-    
+
     current_graphics.rotate(-PI/2);
-    current_graphics.translate(-newWidth,newheight/2);
-    
+    current_graphics.translate(-newWidth, newheight/2);
   } else {
-    
+
     current_graphics = g;
 
     background(data.style.backgroundColor.col);
     strokeWeight(data.style.lineWidth);
     stroke(data.style.lineColor.col);
-    
+
     current_graphics = g;
 
     data.setSize(width, height);
-  } 
+  }
 }
 
 void end_draw()
 {
-  if (record) 
+  if (_record)
   {
     current_graphics.dispose();
     current_graphics.endDraw();
-    record = false;
+    _record = false;
   }
 }
