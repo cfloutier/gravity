@@ -32,9 +32,9 @@ class GravityData extends DataGlobal
 
 class DataGUI extends MainPanel
 {
-  
   DataGlobal data;
-  
+
+  FileGUI file_ui;
   CanvasGUI particles_ui;
   SpawnersGui spawners_ui;
   PlanetsGui planets_gui;
@@ -43,8 +43,8 @@ class DataGUI extends MainPanel
    public DataGUI(GravityData data)
   {
     this.data = data;
-
-    file_ui = new FileGUI(data);    
+    
+    file_ui = new FileGUI(data); 
     particles_ui = new CanvasGUI(data.particles); 
     spawners_ui = new SpawnersGui(data.spawners); 
     planets_gui = new PlanetsGui(data.planets); 
