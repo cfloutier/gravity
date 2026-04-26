@@ -1,9 +1,7 @@
-
 int indexControler = 0;
 
 static final int StartX = 20;
 static final int StartY = 20;
-
 
 static class LabelsHandler
 {
@@ -20,132 +18,88 @@ static class LabelsHandler
   }
 }
 
-class MainPanel
+class myRadioButton extends RadioButton
 {
-  ArrayList<GUIPanel> panels = new ArrayList<GUIPanel>();
-  String activeTab = "";
-  MainPanel()
+  public GenericData the_object;
+
+  public myRadioButton(final ControlP5 theControlP5, final ControllerGroup< ? > theParent, final String theName, final int theX, final int theY )
   {
+    super(theControlP5, theParent, theName, theX, theY  );
   }
 
-  void addTab(GUIPanel panel)
+  public void setValue(int value)
   {
-    panels.add(panel);
+    activate(value);
+  }
+}
+
+// helper class used by panels (e.g. LinesGUI) to group related controls
+// and synchronize their values with a DataLines instance via reflection.
+// Usage:
+//   ControlsGroup group = new ControlsGroup(dataLines);
+//   group.add(addSlider("fieldName", "Label", min, max));
+//   // later, in setGUIValues():
+//   group.updateFromData();
+//   // in update_ui():
+//   group.show() or group.hide() depending on type
+// The class skips Button controllers and only updates Slider/Toggle values.
+
+class ControlsGroup {
+  ArrayList<Controller> updatables = new ArrayList<Controller>();
+  ArrayList<Button> buttons = new ArrayList<Button>();
+  GenericData data;
+
+  ControlsGroup(GenericData data) {
+    this.data = data;
   }
 
-  void Init()
-  {
-    // must be called after addTabs
-
-    for (GUIPanel panel : panels)
-    {
-      panel.Init(); //<>// //<>//
-      panel.setupControls(); //<>// //<>//
-    }
-  }
-
-  void setGUIValues()
-  {
-    for (GUIPanel panel : panels)
-    {
-      panel.setGUIValues();
-    }
-  }
-
-  void update_ui()
-  {
-    // update all changes in data to controller thats are not user imputs
-    // like labels
-    // or show hide controls depending on a status
-
-    if (!data.any_change() && !data.need_update_ui )
+  void add(Controller c) {
+    if (c instanceof Button) {
+      buttons.add((Button)c);
       return;
+    }
+    updatables.add(c);
+  }
 
-    for (GUIPanel panel : panels)
+  void show() {
+    for (Controller c : updatables) c.show();
+    for (Button c : buttons)
     {
-      panel.update_ui();
+      c.show();
+      // c.plugTo(this, "slash");
     }
   }
 
-  void draw()
-  {
-    // checks if it's not an export
-    if (record)
-      return;
-
-    for (GUIPanel panel : panels)
-    {
-      panel.draw();
-    }
+  void hide() {
+    for (Controller c : updatables) c.hide();
+    for (Button c : buttons) c.hide();
   }
 
-  GUIPanel dragging_panel;
-
-  void mousePressed()
-  {
-    if (cp5.isMouseOver())
-      return;
-
-    println("mouse pressed " + mouseX);
+  void updateFromData() {
+    for (Controller c : updatables) {
 
 
-    for (GUIPanel panel : panels)
-    {
-      if (!panel.tab.isActive())
-        continue;
+      String fieldName = c.getName();
+      try {
+        java.lang.reflect.Field dataField = data.getClass().getDeclaredField(fieldName);
+        dataField.setAccessible(true);
+        Object value = dataField.get(data);
 
-      if (panel.mousePressed())
-      {
-        dragging_panel = panel;
-        return;
+        if (c instanceof Slider) {
+          Slider slider = (Slider) c;
+          slider.setValue(((Number) value).floatValue());
+        } else if (c instanceof Toggle) {
+          Toggle toggle = (Toggle) c;
+          toggle.setValue((Boolean) value);
+        }
       }
-    }
-
-    // if not check the non active panel
-
-     for (GUIPanel panel : panels)
-    {
-      if (panel.tab.isActive())
-        continue;
-
-      if (panel.mousePressed())
-      {
-        dragging_panel = panel;
-        cp5.getTab(dragging_panel.pageName).bringToFront();
-        return;
+      catch (Exception e) {
+        println("Error updating " + fieldName + " (" + e.getClass().getSimpleName() + "): " + e.getMessage());
       }
     }
   }
-
-  void mouseDragged()
-  {
-    if (dragging_panel != null)
-    {
-      dragging_panel.mouseDragged();
-    }
-  }
-
-  void mouseReleased() {
-
-    if (dragging_panel != null)
-    {
-      dragging_panel.mouseReleased();
-      dragging_panel = null;
-    }
-  }
 }
 
-void mousePressed() {
-    dataGui.mousePressed();
-}
-
-void mouseDragged() {
-    dataGui.mouseDragged();
-}
-
-void mouseReleased() {
-    dataGui.mouseReleased();
-}
 
 
 class GUIPanel implements ControlListener
@@ -160,9 +114,7 @@ class GUIPanel implements ControlListener
   int widthCtrl = 300;
   int heightCtrl = 20;
 
-
   GenericData associated_data;
-
 
   GUIPanel(String pageName, GenericData data)
   {
@@ -175,8 +127,8 @@ class GUIPanel implements ControlListener
   void Init()
   {
     tab = cp5.addTab(pageName);
-    //print (" tab " + tab);
-    println("add tab " + pageName);
+    // print (" tab " + tab);
+    // println("add tab " + pageName);
 
     cp5.addListener(this);
 
@@ -210,21 +162,29 @@ class GUIPanel implements ControlListener
     println("Error : update_ui() must be implemented in extended classes ");
   }
 
+
+  @SuppressWarnings("unused")
+    boolean key_move(PVector key_move, int delta_ms)
+  {
+    return false;
+  }
+
   void draw()
   {
     // can be optionnally setup to draw figure in the drawing
   }
 
+
+
   boolean mousePressed()
   {
     // return true to start a drag
-    return false; 
+    return false;
   }
 
   void mouseDragged()
   {
     // called if drag has started on each mouse move
-
   }
 
   void mouseReleased()
@@ -259,14 +219,17 @@ class GUIPanel implements ControlListener
 
       String class_name = group.getClass().getSimpleName();
 
-      boolean is_radio = class_name.equals("RadioButton");
+      boolean is_radio = class_name.equals("myRadioButton");
 
       if (is_radio)
       {
+        myRadioButton radio = (myRadioButton) group;
+
         // small fix to setup int_value from radio
         int int_value = int(group.getValue());
         String name = group.getName();
-        associated_data.setInt(name, int_value);
+        radio.the_object.setInt(name, int_value);
+        update_ui();
       }
     }
 
@@ -383,13 +346,17 @@ class GUIPanel implements ControlListener
 
     s.getCaptionLabel().getStyle().marginLeft = -getWidthLabel(label) - 8; // adjust -10 as needed
 
-
     return s;
   }
 
   Toggle addToggle(String name, String label)
   {
-    Toggle t = cp5.addToggle(associated_data, name)
+    return addToggle(name, label, associated_data);
+  }
+
+  Toggle addToggle(String name, String label, Object the_data)
+  {
+    Toggle t = cp5.addToggle(the_data, name)
       .setLabel(label)
       .setPosition(xPos, yPos)
       .setSize(100, heightCtrl)
@@ -400,7 +367,6 @@ class GUIPanel implements ControlListener
     int tmp = controlerColor.getActive();
     controlerColor.setActive( controlerColor.getBackground());
     controlerColor.setBackground(tmp);
-
 
     xPos+=100+5;
 
@@ -452,17 +418,27 @@ class GUIPanel implements ControlListener
     return bt;
   }
 
-  RadioButton addRadio(String name, ArrayList<String> labels )
+  myRadioButton addRadio(String name, ArrayList<String> labels)
+  {
+    return addRadio(name, labels, associated_data);
+  }
+
+  myRadioButton addRadio(String name, ArrayList<String> labels, GenericData the_data)
   {
     int width_bt = 100;
 
-    RadioButton r1 = cp5.addRadioButton(associated_data, name)
-      .setPosition(xPos, yPos)
+    // return addRadioButton( the_data , the_data != null ? the_data.toString( ) : "" , name , 0 , 0 );
+    myRadioButton r1 = new myRadioButton( cp5, ( Tab ) cp5.controlWindow.getTabs( ).get( 1 ), name, 0, 0 );
+    cp5.register( the_data, the_data != null ? the_data.toString( ) : "", r1 );
+    r1.registerProperty( "arrayValue" );
+    // return myController;
+    r1.the_object = the_data;
+
+    r1.setPosition(xPos, yPos)
       .setSize(width_bt, heightCtrl)
       .setItemsPerRow(labels.size())
       .setSpacingColumn(10)
       .moveTo(pageName);
-
 
     for (int i = 0; i < labels.size(); i++)
     {

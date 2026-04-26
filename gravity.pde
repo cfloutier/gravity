@@ -55,8 +55,6 @@ void setupControls()
     cp5 = new ControlP5(this); 
     cp5.getTab("default").setLabel("Hide GUI");
     
-    // special tab
-    addFileTab();
     dataGui.Init();
 }
 
@@ -72,7 +70,7 @@ void draw()
     // recenter
     pushMatrix();
     translate(width/2, height/2);
-    scale(data.global_scale,data.global_scale);
+    scale(data.page.global_scale, data.page.global_scale);
     
     strokeWeight(data.style.lineWidth);   
     stroke(data.style.lineColor.col);

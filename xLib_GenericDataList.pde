@@ -1,11 +1,10 @@
-// a set of tools used to manages list (planets, particles and so on) //<>// //<>// //<>//
+// a set of tools used to manages list (planets, particles and so on)
 
 class DataList extends GenericData
 {
   int current_index = 0;
   ArrayList<GenericData> items = new ArrayList<GenericData>();
   String sub_chapter_name = "";
-
 
   DataList(String chapter_name, String sub_chapter_name)
   {
@@ -17,7 +16,7 @@ class DataList extends GenericData
   {
     return items.size();
   }
-  
+
   void reset()
   {
     items.clear();
@@ -65,7 +64,6 @@ class GUIListPanel extends GUIPanel
 {
   DataList data_list;
 
-
   GUIListPanel(String pageName, DataList data)
   {
     super(pageName, data);
@@ -82,9 +80,14 @@ class GUIListPanel extends GUIPanel
   void addListBar()
   {
     space();
+
     addButton("Prev").plugTo(this, "prev");
+    xPos+= 20;
+    addButton("Move Prev").plugTo(this, "move_prev");
     addButton("Remove").plugTo(this, "remove");
     addButton("Add").plugTo(this, "add");
+    addButton("Move Next").plugTo(this, "move_next");
+    xPos+= 20;
     addButton("Next").plugTo(this, "next");
     nextLine();
     space();
@@ -116,7 +119,7 @@ class GUIListPanel extends GUIPanel
       if (data_list.current_index >= data_list.count())
         data_list.current_index = 0;
     }
-    
+
     updateCurrentItem();
   }
 
@@ -145,10 +148,46 @@ class GUIListPanel extends GUIPanel
     fix_index();
 
     data_list.items.remove(data_list.current_index);
-    print(data_list.current_index);
+    // print(data_list.current_index);
     data_list.current_index--;
     last_index = -1;
-    fix_index();  
+    fix_index();
+    updateCurrentItem();
+  }
+
+  void move_prev()
+  {
+    if (data_list.count() == 0)
+      return;
+
+    if (data_list.current_index <= 0)
+      return;
+
+    var current = data_list.items.get(data_list.current_index);
+
+    data_list.items.remove(data_list.current_index);
+    data_list.current_index = data_list.current_index - 1;
+    data_list.items.add(data_list.current_index, current);
+
+    fix_index();
+    updateCurrentItem();
+  }
+
+  void move_next()
+  {
+    if (data_list.count() == 0)
+      return;
+
+    if (data_list.current_index >= data_list.count()-1)
+      return;
+
+    var current = data_list.items.get(data_list.current_index);
+
+    data_list.items.remove(data_list.current_index);
+    data_list.current_index = data_list.current_index + 1;
+    data_list.items.add(data_list.current_index, current);
+
+    fix_index();
     updateCurrentItem();
   }
 }
