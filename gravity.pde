@@ -70,7 +70,7 @@ void draw()
     
     // recenter
     pushMatrix();
-    translate(width/2, height/2);
+    // translate(width/2, height/2);
     
     
     strokeWeight(data.style.lineWidth);   
