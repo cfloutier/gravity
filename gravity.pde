@@ -37,6 +37,7 @@ ControlP5 cp5;
 void setup() 
 { 
     size(1200, 800); 
+    pixelDensity(1);
     
     data = new GravityData();
     dataGui = new DataGUI(data);
