@@ -36,8 +36,9 @@ ControlP5 cp5;
 
 void setup() 
 { 
-    size(1200, 800); 
+    size(1200, 800);
     pixelDensity(1);
+    surface.setResizable(true);
     
     data = new GravityData();
     dataGui = new DataGUI(data);
@@ -48,7 +49,6 @@ void setup()
     
     data.LoadSettings("./Settings/default.json");
     dataGui.setGUIValues();  
-    surface.setResizable(true);
 }
 
 void setupControls()
