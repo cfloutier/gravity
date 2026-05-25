@@ -9,7 +9,7 @@ class DataPage extends GenericData
   float clip_height = 600;
   
   int paper_format = PAPER_NONE;  // 0: None, 1: A4, 2: A3, 3: A2
-  int margin = MARGIN_3CM;  // 0: 1cm, 1: 3cm, 2: 10cm
+  int margin = MARGIN_3CM;  // 0: 0cm, 1: 1cm, 2: 2cm, 3: 3cm
 
   DataPage() {
     super("Page");
@@ -29,6 +29,12 @@ class FileGUI extends GUIPanel
   BoundingBox last_bbox = null;
   float export_scale = 1.0;
   boolean export_should_rotate = false;
+
+  // Set this to your sketch's PolylineGroup to enable direct SVG export
+  // (bypasses Processing's SVG renderer – faster, with console progress)
+  PolylineGroup export_group = null;
+
+  int last_save_duration = -1;
 
   FileGUI(DataGlobal data)
   {
@@ -100,20 +106,21 @@ class FileGUI extends GUIPanel
 
     addLabel("Export : ");
 
-    addButton("Export PDF").plugTo(this, "ExportPDF");
     addButton("Export SVG").plugTo(this, "ExportSVG");
+    addButton("SVG (Processing)").plugTo(this, "ExportSVGProcessing");
 
     nextLine();
     addLabel("Page : ");
-    nextLine();
     scale_slider = new ScaleSlider(cp5, "Scale");
 
     scale_slider.setPosition(xPos, yPos)
       .setSize(widthCtrl, heightCtrl)
       .setRange(-9, 9)
       .moveTo("Files")
-      .setValue(0)
-      .getCaptionLabel().align(ControlP5.LEFT, ControlP5.TOP_OUTSIDE).setPaddingX(0);
+      .setValue(0);
+
+    scale_slider.getCaptionLabel().getStyle().marginTop = 0;
+    scale_slider.getCaptionLabel().getStyle().marginLeft = -getWidthLabel("Scale") - 8;
 
     xPos += widthCtrl + 10;
 
@@ -142,13 +149,13 @@ class FileGUI extends GUIPanel
     paper_formats.add("A2");
     paper_format_radio = addRadio("paper_format", paper_formats);
     
-    nextLine();
+    // nextLine();
     addLabel("Margins :");
     ArrayList<String> margins = new ArrayList<String>();
     margins.add("0 cm");
     margins.add("1 cm");
+    margins.add("2 cm");
     margins.add("3 cm");
-    margins.add("10 cm");
     margin_radio = addRadio("margin", margins);
   }
 
@@ -164,34 +171,58 @@ class FileGUI extends GUIPanel
   void LoadJson()
   {
     println("LoadJson ");
+    stop_compute = true;
     selectInput("Select data file ", "loadSelected", dataFile("../Settings/default.json")  );
   }
 
   void SaveJson()
   {
     println("SaveJson ");
-
+    stop_compute = true;
     selectInput("Save data file ", "saveSelected", dataFile(default_path()));
   }
 
   void Save()
   {
     if (data.settings_path != "")
+    {
+      stop_compute = true;
       data.SaveSettings(data.settings_path);
+    }
   }
 
-  void ExportPDF()
+  void ExportSVGProcessing()
   {
+    // Force Processing's SVG renderer (legacy fallback)
     _record = true;
     data.changed = true;
-    mode = 0;
+    mode = 2;
   }
 
   void ExportSVG()
   {
-    _record = true;
-    data.changed = true;
-    mode = 2;
+    if (export_group != null && export_group.size() > 0 && page_data.paper_format != PAPER_NONE) {
+      // Direct SVG export – bypasses Processing's SVG renderer
+      String name = data.name.equals("") ? "default" : data.name;
+      String fmt  = "";
+      switch (page_data.paper_format) {
+        case PAPER_A4: fmt = "_A4"; break;
+        case PAPER_A3: fmt = "_A3"; break;
+        case PAPER_A2: fmt = "_A2"; break;
+      }
+      String filepath = sketchPath("Export/" + name + fmt + "_"
+        + year() + "-" + month() + "-" + day()
+        + "_" + hour() + "-" + minute() + "-" + second() + ".svg");
+      long t0 = System.currentTimeMillis();
+      writeSVGDirect(filepath, export_group, page_data.paper_format);
+      last_save_duration = (int)(System.currentTimeMillis() - t0);
+      println("[SVG] Export completed in " + StringUtils.formatDuration(last_save_duration));
+    } else {
+      // Fallback: Processing's SVG renderer (+ post-process)
+      _record = true;
+      data.changed = true;
+      mode = 2;
+    }
   }
 
   void Reset_Scale()
@@ -205,6 +236,7 @@ class FileGUI extends GUIPanel
     last_bbox = bbox;
     export_should_rotate = shouldRotateForExport(bbox);
     export_scale = calculateExportScale(bbox, data.page.paper_format, data.page.margin, export_should_rotate);
+    // println("[FileUI] updateExportScale -> scale=" + export_scale + " rotate=" + export_should_rotate + " paper=" + data.page.paper_format);
   }
 }
 
@@ -230,9 +262,6 @@ void saveSelected(File selection)
   }
 }
 
-
-// Slider slider_crop_width;
-// Slider slider_crop_height;
 
 //subclass slider
 public class ScaleSlider extends Slider {
@@ -272,7 +301,9 @@ void loadSelected(File selection)
 }
 
 boolean _record = false;
+boolean stop_compute = false; // interrompt le calcul en cours lors d'un load/save
 int mode  = 0;
+long _record_start_millis = 0;
 
 String export_fileName = "";
 void ExportPDF()
@@ -285,6 +316,7 @@ void ExportPDF()
 void ExportDXF()
 {
   _record = true;
+  data.changed = true;
   mode = 1;
 }
 
@@ -310,8 +342,15 @@ void start_draw()
     if (name == "")
       name = "default";
 
-    float newWidth = width ;
-    float newheight = height ;
+    float newWidth = width;
+    float newheight = height;
+
+    // Si un format papier est sélectionné, utiliser ses dimensions pour le canvas SVG/PDF
+    if (data.page.paper_format != PAPER_NONE) {
+      float[] paper_dims_mm = getPaperDimensions(data.page.paper_format);
+      newWidth = mmToSvgPx(paper_dims_mm[0]);
+      newheight = mmToSvgPx(paper_dims_mm[1]);
+    }
 
     // Add paper format to filename
     String format_suffix = "";
@@ -337,23 +376,22 @@ void start_draw()
       current_graphics = createGraphics((int)newWidth, (int)newheight, SVG, export_fileName);
     }
 
-    println("Exported to " + export_fileName);
-
-    data.setSize(newWidth, newheight);
+    println("Saving file in progress... please wait. " + export_fileName);
+    _record_start_millis = System.currentTimeMillis();
 
     current_graphics.beginDraw();
-    
-    
+
     // Calculate active scale for export
     float active_scale = (data.page.paper_format != PAPER_NONE) ? file_ui.export_scale : data.page.global_scale;
     printExportDebugInfo(file_ui.last_bbox, active_scale, data.page.paper_format);
 
-    // Apply transformations to current_graphics (PDF/SVG/DXF)
     current_graphics.pushMatrix();
     current_graphics.strokeWeight(data.style.lineWidth * active_scale);
+    // Centrage sur le canvas papier : le dessin est en coordonnées centrées sur (0,0)
+    if (data.page.paper_format != PAPER_NONE) {
+      current_graphics.translate(newWidth / 2, newheight / 2);
+    }
     current_graphics.scale(active_scale, active_scale);
-    
-    // Rotate only if drawing is landscape-oriented (wider than tall)
     if (file_ui.export_should_rotate) {
       current_graphics.rotate(-PI/2);
     }
@@ -386,6 +424,12 @@ void end_draw()
     current_graphics.popMatrix();  // Close the pushMatrix from start_draw
     current_graphics.dispose();
     current_graphics.endDraw();
+    int duration = (int)(System.currentTimeMillis() - _record_start_millis);
+    file_ui.last_save_duration = duration;
+    println("Save completed in " + StringUtils.formatDuration(duration));
+    if (mode == 2) {
+      postProcessSVGForPlotter(export_fileName, data.page.paper_format);
+    }
     _record = false;
   } else {
     popMatrix();  // Close the pushMatrix from start_draw
