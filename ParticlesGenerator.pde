@@ -124,6 +124,7 @@ class Particle {
 class ParticlesGenerator {
 
   ArrayList<Particle> particles =  new ArrayList<Particle>();
+  PolylineGroup lineGroup = new PolylineGroup();
 
   GravityData data;
 
@@ -161,8 +162,15 @@ class ParticlesGenerator {
         for (Particle p: particles)
         {
             p.move();
-            //p.print();
         }
+    }
+
+    lineGroup.clear();
+    for (Particle p : particles) {
+      Polyline poly = new Polyline();
+      for (PVector pt : p.line.points)
+        poly.addPoint(pt);
+      lineGroup.add(poly);
     }
   }
 }

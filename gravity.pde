@@ -46,7 +46,9 @@ void setup()
     generator = new ParticlesGenerator(data);
 
     setupControls();
-    
+
+    dataGui.file_ui.export_group = generator.lineGroup;
+
     data.LoadSettings("./Settings/default.json");
     dataGui.setGUIValues();  
 }
