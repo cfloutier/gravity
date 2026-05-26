@@ -2,6 +2,7 @@
   "Planets": {
     "planet_0": {
       "gravity": 100,
+      "min_distance_to_planets": 5,
       "drag": 1,
       "radius": 10,
       "center_y": -71.0009765625,
@@ -9,6 +10,7 @@
     },
     "planet_1": {
       "gravity": 246.66668701171875,
+      "min_distance_to_planets": 5,
       "drag": 1,
       "radius": 70,
       "center_y": 95.333984375,
@@ -19,9 +21,8 @@
   },
   "Canvas": {
     "steps_size": 1.0989999771118164,
-    "max_distance_to_page": 2000,
-    "min_distance_to_planets": 5,
-    "steps": 3499
+    "max_distance_to_page": 340,
+    "steps": 2773
   },
   "Style": {
     "backgroundColor": -16118253,
@@ -41,5 +42,13 @@
     },
     "nb_items": 1,
     "current_index": 0
+  },
+  "Page": {
+    "clipping": false,
+    "clip_width": 0,
+    "margin": 1,
+    "clip_height": 0,
+    "paper_format": 4,
+    "global_scale": 0.5263158679008484
   }
 }

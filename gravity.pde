@@ -68,8 +68,9 @@ void draw()
   
     background(data.style.backgroundColor.col);
     
-   // if (data.any_change())
-      generator.buildLines();   
+   if (data.any_change())
+      generator.buildLines();
+      dataGui.file_ui.updateExportScale(generator.lineGroup.getBoundingBox(false, 0, 0));
     
     // recenter
     pushMatrix();
