@@ -3,20 +3,6 @@
 class Line {
   ArrayList<PVector> points =  new ArrayList<PVector>();
 
-  void draw()
-  {
-    current_graphics.noFill();
-    current_graphics.beginShape();
-
-    for (int i = 0; i < points.size(); i++)
-    {
-      PVector pA = points.get(i);
-      current_graphics.vertex(pA.x, pA.y);
-    }
-
-    current_graphics.endShape();
-  }
-  
   void add(PVector p)
   {
     points.add(p);
@@ -110,11 +96,6 @@ class Particle {
         line.add(position);      
     }
 
-    void draw()
-    {
-        line.draw();
-    }
-    
     void print()
     {
       println( position.x + " - " + position.y + " | " + speed.x + " - " + speed.y );
@@ -133,12 +114,7 @@ class ParticlesGenerator {
   }
 
   void draw() {
-    for (int i = 0; i < particles.size(); i++)
-    {
-      Particle p = particles.get(i);
-      p.draw();
-    }
-
+    lineGroup.draw(data.page.clipping, data.page.clip_width, data.page.clip_height);
   }
 
   void buildLines() {

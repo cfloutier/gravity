@@ -44,7 +44,7 @@ class DataGUI extends MainPanel
   {
     this.data = data;
     
-    file_ui = new FileGUI(data); 
+    file_ui = new FileGUI(data, true);
     particles_ui = new CanvasGUI(data.particles); 
     spawners_ui = new SpawnersGui(data.spawners); 
     planets_gui = new PlanetsGui(data.planets); 

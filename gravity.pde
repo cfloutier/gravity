@@ -70,7 +70,7 @@ void draw()
     
    if (data.any_change())
       generator.buildLines();
-      dataGui.file_ui.updateExportScale(generator.lineGroup.getBoundingBox(false, 0, 0));
+      dataGui.file_ui.updateExportScale(generator.lineGroup.getBoundingBox(data.page.clipping, data.page.clip_width, data.page.clip_height));
     
     // recenter
     pushMatrix();
