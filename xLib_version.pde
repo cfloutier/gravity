@@ -1,12 +1,24 @@
 String get_xlib_version()
 {
-  return "3.11.2";
+  return "3.12.0";
 }
 
 
 /*
 
  # CHANGELOG
+
+ ## [3.12.0] - 2026-08-16
+ - Removed xLib_Box3D, xLib_BoxIntersection, xLib_BVH3D, xLib_Camera3D, xLib_CameraData, xLib_Mesh
+   from the shared library. Only trace_3d ever used these — every other project got them pushed
+   anyway (push-to-projects.ps1 syncs every xLib_*.pde to every project indiscriminately) and just
+   carried them as dead code, which was tripping up VS Code's Processing linter with spurious
+   "duplicate type/method" diagnostics (real compilation was unaffected, but noisy).
+   Renamed in trace_3d to xlib3d_Box3D.pde / xlib3d_BoxIntersection.pde / xlib3d_BVH3D.pde /
+   xlib3d_Camera3D.pde / xlib3d_CameraData.pde / xlib3d_Mesh.pde (class names unchanged - .pde
+   tab names don't need to match their class in Processing) so they fall outside the xLib_*.pde
+   glob the sync scripts match on and stop being synced anywhere; deleted from every other project
+   and from processing_xlib. No sync-tools script changes needed - filtering is purely by filename.
 
  ## [3.11.2] - 2026-08-16
  - xLib_FileUI: added bringNativeFileDialogToFront(), called after selectInput()/selectOutput()
