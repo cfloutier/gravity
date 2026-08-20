@@ -1,3 +1,7 @@
 out/**
 Export/**
 windows-amd64/**
+
+# export_app.ps1 build/release output
+build_*/
+releases/
