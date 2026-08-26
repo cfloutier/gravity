@@ -66,7 +66,7 @@ void draw()
 {
     start_draw();  
   
-    background(data.style.backgroundColor.col);
+    background(data.style.backgroundColor);
     
    if (data.any_change())
       generator.buildLines();
@@ -78,7 +78,7 @@ void draw()
     
     
     strokeWeight(data.style.lineWidth);   
-    stroke(data.style.lineColor.col);
+    stroke(data.style.lineColor);
       
     smooth();
 
