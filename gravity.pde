@@ -33,8 +33,9 @@ ParticlesGenerator generator;
 PGraphics current_graphics;
 
 ControlP5 cp5;
+ColorChooserPopup colorPopup;
 
-void setup() 
+void setup()
 { 
     size(1200, 800);
     pixelDensity(1);
@@ -55,9 +56,8 @@ void setup()
 
 void setupControls()
 { 
-    cp5 = new ControlP5(this); 
-    cp5.getTab("default").setLabel("Hide GUI");
-    
+    init_xlib();
+
     // special tab
     dataGui.Init();
 }
